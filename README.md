@@ -17,9 +17,10 @@ e.g. ```http://tomerlichtash.com/css-counters-preview/?startAt=0&endAt=200&count
 * reverse values for hebrew (other rtl langs?)
 
 * Hebrew and does not support negative numbers: http://tomerlichtash.com/css-counters-preview/?startAt=-4&endAt=4&counterStyleType=hebrew
-* lower-roman and does not support negative numbers: http://tomerlichtash.com/css-counters-preview/?startAt=-10&endAt=10&counterStyleType=lower-roman
-* lower-roman does range is up to 3999: http://tomerlichtash.com/css-counters-preview/?startAt=3995&endAt=4005&counterStyleType=lower-roman
-* hebrew range is 999999: http://tomerlichtash.com/css-counters-preview/?startAt=999990&endAt=1000000&counterStyleType=hebrew
-* arabic-indic supports negative numbers: http://tomerlichtash.com/css-counters-preview/?startAt=-10&endAt=10&counterStyleType=arabic-indic
+* lower-roman and does not support negative numbers: http://tomerlichtash.com/css-counters-preview/?startAt=-4&endAt=4&counterStyleType=lower-roman
+* lower-roman does range is up to 3999: http://tomerlichtash.com/css-counters-preview/?startAt=3996&endAt=4004&counterStyleType=lower-roman
+* hebrew range is 999999: http://tomerlichtash.com/css-counters-preview/?startAt=999996&endAt=1000004&counterStyleType=hebrew
+* arabic-indic supports negative numbers: http://tomerlichtash.com/css-counters-preview/?startAt=-10&endAt=2&counterStyleType=arabic-indic
 * not all rtl languages suffer from this bug; arabic-indic for instance: http://tomerlichtash.com/css-counters-preview/?startAt=999990&endAt=1000000&counterStyleType=arabic-indic
 * arabic-indic supports big numbers: http://tomerlichtash.com/css-counters-preview/?startAt=2000000&endAt=2000100&counterStyleType=arabic-indic
+* unsupported zero for hebrew: http://localhost:5000/?startAt=-2&endAt=0&counterStyleType=hebrew

@@ -75,7 +75,7 @@ const count = () => {
 }
 
 const getOffsetInput = () => {
-  return Number(offsetInput.value) - 1;
+  return Number(offsetInput.value);
 }
 
 const getItemCounterValue = () => {
@@ -83,7 +83,6 @@ const getItemCounterValue = () => {
 }
 
 const resetCounter = (limit) => {
-  // const offsetInput = getOffsetInput();
   counterReset.innerHTML = `body{counter-reset: my-counter ${limit}}`;
 }
 
@@ -130,7 +129,7 @@ const onCounterTypeSelectorChange = (evt) => {
 
 const onReset = (defaultType) => {
   destroyAll();
-  reset(199, -4);
+  resetValues(199, -4);
   resetCounter(getOffsetInput());
   render();
 }
