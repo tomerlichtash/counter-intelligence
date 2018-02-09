@@ -1,3 +1,4 @@
+let once = false;
 let counterReset = document.createElement('style');
 let defaultType = 'hebrew';
 let items = [];
@@ -127,10 +128,23 @@ const onCounterTypeSelectorChange = (evt) => {
 
 const onReset = (defaultType) => {
   destroyAll();
-  countInput.value = 199;
-  offsetInput.value = -4;
+  reset(199, -4);
   resetCounter();
   render();
+}
+
+const reset = (count, offset) => {
+  countInput.value = count || 199;
+  offsetInput.value = offset || -4;
+}
+
+const getUrlParam = (name, url) => {
+  if (!url) url = location.href;
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( url );
+  return results == null ? null : results[1];
 }
 
 hideBtn.addEventListener('click', (evt) => resetGrid(false));
@@ -143,6 +157,19 @@ counterTypeSelector.addEventListener('change', (evt) => onCounterTypeSelectorCha
 
 document.body.appendChild(counterReset);
 
+const startAt = Number(getUrlParam('startAt'));
+const endAt = Number(getUrlParam('endAt'));
+
+if (!once) {
+  if (startAt && endAt) {
+    reset(endAt, startAt);
+  }
+  once = true;  
+}
+
 resetCounter();
 render();
-select(randomize());
+
+if (!startAt && !endAt) {
+  select(randomize());
+}
