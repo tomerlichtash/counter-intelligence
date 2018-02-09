@@ -80,9 +80,9 @@ const getItemCounterValue = () => {
   return Number(countInput.value);
 }
 
-const resetCounter = () => {
-  const offsetInput = getOffsetInput();
-  counterReset.innerHTML = `body{counter-reset: my-counter ${offsetInput}}`;
+const resetCounter = (limit) => {
+  // const offsetInput = getOffsetInput();
+  counterReset.innerHTML = `body{counter-reset: my-counter ${limit}}`;
 }
 
 const onOffsetChange = () => {
@@ -91,12 +91,12 @@ const onOffsetChange = () => {
 
   if (itemsCount < offsetInput) {
     destroyAll();
-    resetCounter();
+    resetCounter(-1);
     return false;
   }
 
   destroyAll();
-  resetCounter();
+  resetCounter(getOffsetInput());
   render();
 }
 
@@ -134,8 +134,8 @@ const onReset = (defaultType) => {
 }
 
 const reset = (count, offset) => {
-  countInput.value = count || 199;
-  offsetInput.value = offset || -4;
+  countInput.value = count;
+  offsetInput.value = offset;
 }
 
 const getUrlParam = (name, url) => {
@@ -159,17 +159,22 @@ document.body.appendChild(counterReset);
 
 const startAt = Number(getUrlParam('startAt'));
 const endAt = Number(getUrlParam('endAt'));
+const counterStyleType = getUrlParam('counterStyleType');
 
 if (!once) {
-  if (startAt && endAt) {
+  if (typeof startAt == 'number' && typeof endAt == 'number') {
     reset(endAt, startAt);
+    resetCounter(startAt);
+    render();
   }
+
+  if (counterStyleType) {
+    onCounterTypeSelectorChange({target: {value: counterStyleType}})
+  }
+
   once = true;  
-}
-
-resetCounter();
-render();
-
-if (!startAt && !endAt) {
+} else {
+  resetCounter();
+  render();
   select(randomize());
 }
