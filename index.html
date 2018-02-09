@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <head>
+    <title>title</title>
+    <link href="https://fonts.googleapis.com/css?family=Miriam+Libre" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header>
+      <h1>CSS Counter Style Lab</h1>
+      <nav>
+        <ul>
+          <li><select name="counter-type" id="counterTypeSelector"></select></li>
+          <li title="offset"><label for="offset"><b>Start</b><input id="offset" type="number" value="-4" placeholder="offset"/></label></li>
+          <li title="count"><label for="count"><b>End</b><input id="count" type="number" value="199" placeholder="count"/></label></li>
+          <li title="Random"><button id="rand">Random</button></li>
+          <li title="Deselect All"><button id="hide">Hide All</button></li>
+          <li title="Select All"><button id="show">Show All</button></li>
+          <li title="selected/total" id="status" class="status"></li>
+          <li title="Reset"><button id="reset">Reset</button></li>
+        </ul>
+      </nav>
+    </header>
+  </body>
+  <script src="script.js"></script>
+</html>

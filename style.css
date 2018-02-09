@@ -1,0 +1,130 @@
+body {
+  direction: rtl;
+  padding: 6rem 0 0;
+  text-align: center;
+  user-select: none;
+  font-family: 'Miriam Libre', sans-serif;
+}
+
+ul, ol, li {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(0,0,0,.8);
+}
+
+header h1 {
+  font-size: 1rem;
+  letter-spacing: 1px;
+  margin: 0;
+  line-height: 3rem;
+  border-bottom: 1px dashed rgba(255,255,255,.3);
+  text-transform: uppercase;
+  color: #fff;
+}
+
+nav {
+  text-align: center;
+  color: #fff;
+  line-height: 3rem;
+}
+
+nav ul li {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  margin: 0 1.5rem;
+}
+
+nav b,
+nav button {
+  font-size: .8rem;
+  margin: 0;
+  border: none;
+  background: none;
+  outline: none;
+  cursor: pointer;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 900;
+  border-radius: 6px;
+}
+
+nav label b {
+  font-weight: 100;
+  margin: 0 .25rem;
+}
+
+nav input {
+  text-align: center;
+  border: none;
+  /* line-height: 1rem; */
+  position: relative;
+  /* line-height: 2rem; */
+  font-size: .8rem;
+  width: 80px;
+  font-family: 'Miriam Libre', sans-serif;
+  direction: ltr;
+  background: #000;
+  color: #fff;
+  font-weight: 900;
+}
+
+button:hover {
+  background: red;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+header ~ label {
+  counter-increment: my-counter;
+  cursor: pointer;
+}
+
+header ~ label span::before {
+  display: inline-block;
+  content: counter(my-counter, disc);
+  direction: rtl;
+  border-radius: 10rem;
+  line-height: 5rem;
+  width: 5rem;
+  height: 5rem;
+  font-weight: 900;
+  font-size: 1rem;
+  margin: 1rem;
+}
+
+header ~ label span:hover::before {
+  position: relative;
+  background: blue;
+  color: #fff;
+}
+
+input:first-child ~ span::before {
+  transform: rotate(0deg);
+  transition: transform 225ms ease-in-out;
+}
+
+input:first-child:checked ~ span::before {
+  color: green;
+  background: lightgreen;
+  content: counter(my-counter, hebrew);
+  direction: rtl;
+  transform: rotate(3600deg);
+}
+
+.status {
+  position: absolute;
+  right: 1rem;
+  font-size: .8rem;
+}
