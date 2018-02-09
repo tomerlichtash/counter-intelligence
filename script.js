@@ -102,7 +102,7 @@ const onOffsetChange = () => {
 
 const onCountChange = () => {
   destroyAll();
-  resetCounter();
+  resetCounter(getOffsetInput());
   render();
 }
 
@@ -129,11 +129,11 @@ const onCounterTypeSelectorChange = (evt) => {
 const onReset = (defaultType) => {
   destroyAll();
   reset(199, -4);
-  resetCounter();
+  resetCounter(getOffsetInput());
   render();
 }
 
-const reset = (count, offset) => {
+const resetValues = (count, offset) => {
   countInput.value = count;
   offsetInput.value = offset;
 }
@@ -161,20 +161,12 @@ const startAt = Number(getUrlParam('startAt'));
 const endAt = Number(getUrlParam('endAt'));
 const counterStyleType = getUrlParam('counterStyleType');
 
-if (!once) {
-  if (typeof startAt == 'number' && typeof endAt == 'number') {
-    reset(endAt, startAt);
+if (typeof startAt == 'number' && typeof endAt == 'number' && typeof counterStyleType == 'string') {
+    resetValues(endAt, startAt);
     resetCounter(startAt);
     render();
-  }
-
-  if (counterStyleType) {
-    onCounterTypeSelectorChange({target: {value: counterStyleType}})
-  }
-
-  once = true;  
 } else {
-  resetCounter();
+  resetCounter(getOffsetInput());
   render();
   select(randomize());
 }

@@ -2,7 +2,7 @@ body {
   direction: rtl;
   padding: 6rem 0 0;
   text-align: center;
-  user-select: none;
+  /* user-select: none; */
   font-family: 'Miriam Libre', sans-serif;
 }
 
