@@ -12,17 +12,19 @@ const randBtn = document.querySelector('#rand');
 const resetBtn = document.querySelector('#reset');
 const counterTypeSelector = document.querySelector('#counterTypeSelector');
 const status = document.querySelector('#status');
-
 const counterTypes = ["decimal", "decimal-leading-zero", "arabic-indic", "armenian", "upper-armenian", "lower-armenian", "bengali", "cambodian", "khmer", "cjk-decimal", "devanagari", "georgian", "gujarati", "gurmukhi", "hebrew", "kannada", "lao", "malayalam", "mongolian", "myanmar", "oriya", "persian", "lower-roman", "upper-roman", "tamil", "telugu", "thai", "tibetan"]
-counterTypes.map(type => {
-  const option = document.createElement('option');
-  option.value = type;
-  option.innerHTML = type.toUpperCase();
-  if (type == defaultType) {
-    option.selected = true;
-  }
-  counterTypeSelector.appendChild(option)
-});
+
+const renderTypeSelector = (defaultStyleType) => {
+  return counterTypes.map(type => {
+    const option = document.createElement('option');
+    option.value = type;
+    option.innerHTML = type.toUpperCase();
+    if (type == defaultStyleType) {
+      option.selected = true;
+    }
+    counterTypeSelector.appendChild(option)
+  });
+}
 
 const randomize = () => {
   return getItems().map((d, index) => Math.floor(Math.random() * getItems().length));
@@ -123,7 +125,7 @@ const render = () => {
 }
 
 const onCounterTypeSelectorChange = (evt) => {
-  document.styleSheets[1].rules[15].style.content = `counter(my-counter, ${evt.target.value})`
+  document.styleSheets[1].rules[16].style.content = `counter(my-counter, ${evt.target.value})`
 }
 
 const onReset = (defaultType) => {
@@ -162,10 +164,13 @@ const endAt = Number(getUrlParam('endAt'));
 const counterStyleType = getUrlParam('counterStyleType');
 
 if (typeof startAt == 'number' && typeof endAt == 'number' && typeof counterStyleType == 'string') {
-    resetValues(endAt, startAt);
-    resetCounter(startAt);
-    render();
+  renderTypeSelector(counterStyleType);
+  resetValues(endAt, startAt);
+  resetCounter(startAt);
+  onCounterTypeSelectorChange({target:{value: counterStyleType}});
+  render();
 } else {
+  renderTypeSelector(defaultType);
   resetCounter(getOffsetInput());
   render();
   select(randomize());
