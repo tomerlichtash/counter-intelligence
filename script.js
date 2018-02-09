@@ -27,7 +27,7 @@ const renderTypeSelector = (defaultStyleType) => {
 }
 
 const randomize = () => {
-  return getItems().map((d, index) => Math.floor(Math.random() * getItems().length));
+  return getItems().map((d, index) => Math.floor(Math.random() * getItems().length) % 2); 
 }
 
 const createNode = () => {
@@ -65,7 +65,7 @@ const destroyAll = () => {
 
 const select = (values) => {
   resetGrid();
-  values.map(r => getItems()[r].checked = r%2);
+  values.map((r, index) => getItems()[index].checked = r>0);
   count();
 }
 
@@ -124,7 +124,7 @@ const render = () => {
 }
 
 const onCounterTypeSelectorChange = (evt) => {
-  document.styleSheets[1].cssRules[16].style.content = `counter(my-counter, ${evt.target.value})`
+  document.styleSheets[1].cssRules[21].style.content = `counter(my-counter, ${evt.target.value})`
 }
 
 const onReset = (defaultType) => {
@@ -151,7 +151,7 @@ const getUrlParam = (name, url) => {
 hideBtn.addEventListener('click', (evt) => resetGrid(false));
 showBtn.addEventListener('click', (evt) => resetGrid(true));
 randBtn.addEventListener('click', (evt) => select(randomize()));
-resetBtn.addEventListener('click', (evt) => onReset())
+// resetBtn.addEventListener('click', (evt) => onReset())
 countInput.addEventListener('change', (evt) => onCountChange())
 offsetInput.addEventListener('change', (evt) => onOffsetChange())
 counterTypeSelector.addEventListener('change', (evt) => onCounterTypeSelectorChange(evt))

@@ -7,19 +7,22 @@
   </head>
   <body>
     <header>
-      <h1>CSS Counter Preview</h1>
+      <h1>This Is Not Content</h1>
+      <p>Exploring Generated Content in CSS (source: <span class="source"><a href="https://github.com/tomerlichtash/css-counters-preview" target="_blank">github</a></span>)</p>
       <nav>
-        <ul>
-          <li><select name="counter-type" id="counterTypeSelector"></select></li>
-          <li title="offset"><label for="offset"><b>Start</b><input id="offset" type="number" value="-4" placeholder="offset"/></label></li>
-          <li title="count"><label for="count"><b>End</b><input id="count" type="number" value="199" placeholder="count"/></label></li>
-          <li title="Random"><button id="rand">Random</button></li>
-          <li title="Deselect All"><button id="hide">Hide All</button></li>
-          <li title="Select All"><button id="show">Show All</button></li>
-          <li title="selected/total" id="status" class="status"></li>
-          <li title="Reset"><button id="reset">Reset</button></li>
-        </ul>
-      </nav>
+          <ul>
+            <li title="offset"><label for="offset"><b>Start</b><input id="offset" type="number" value="-4" placeholder="offset"/></label></li>
+            <li title="count"><label for="count"><b>End</b><input id="count" type="number" value="199" placeholder="count"/></label></li>
+            <li><select name="counter-type" id="counterTypeSelector"></select></li>
+          </ul>
+          <ul>
+            <!-- <li title="Reset"><button id="reset">Reset</button></li> -->
+            <li title="Random"><button id="rand">Random</button></li>
+            <li title="Select All"><button id="show">All</button></li>
+            <li title="Deselect All"><button id="hide">None</button></li>
+            <li title="selected/total" id="status" class="status"></li>
+          </ul>
+        </nav>
     </header>
   </body>
   <script src="script.js"></script>
