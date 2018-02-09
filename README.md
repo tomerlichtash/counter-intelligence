@@ -14,9 +14,13 @@ e.g. ```http://tomerlichtash.com/css-counters-preview/?startAt=0&endAt=200&count
 * unsupported 0 (defaults to decimal)
 * unsupported minus values
 * unsupported max values
-* reverse values for hebrew (other rtl langs?)
+* reverse values for hebrew (for other rtl langs as well?)
+* direction problems for minus position in negative numbers
 
 * Hebrew and does not support negative numbers: http://tomerlichtash.com/css-counters-preview/?startAt=-4&endAt=4&counterStyleType=hebrew
+  * Safari shows the hebrew word "אפס" for Zero
+  * Chrome reverese that string and shows "ספא" instead.
+  * Firefox uses the decimal value and prints 0.
 * lower-roman and does not support negative numbers: http://tomerlichtash.com/css-counters-preview/?startAt=-4&endAt=4&counterStyleType=lower-roman
 * lower-roman does range is up to 3999: http://tomerlichtash.com/css-counters-preview/?startAt=3996&endAt=4004&counterStyleType=lower-roman
 * hebrew range is 999999: http://tomerlichtash.com/css-counters-preview/?startAt=999996&endAt=1000004&counterStyleType=hebrew

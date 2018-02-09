@@ -124,7 +124,7 @@ const render = () => {
 }
 
 const onCounterTypeSelectorChange = (evt) => {
-  document.styleSheets[1].rules[16].style.content = `counter(my-counter, ${evt.target.value})`
+  document.styleSheets[1].cssRules[16].style.content = `counter(my-counter, ${evt.target.value})`
 }
 
 const onReset = (defaultType) => {
@@ -142,7 +142,7 @@ const resetValues = (count, offset) => {
 const getUrlParam = (name, url) => {
   if (!url) url = location.href;
   name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
   var regex = new RegExp( regexS );
   var results = regex.exec( url );
   return results == null ? null : results[1];
