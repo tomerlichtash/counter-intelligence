@@ -18,13 +18,6 @@ const hasUrlParams = () => {
   return typeof startAt == 'number' && typeof endAt == 'number' && typeof counterStyleType == 'string'
 }
 
-const handleUrlParams =() => {
-  if (hasUrlParams()) {
-    resetValues(endAt, startAt);
-    dangerouslySetCounterType({target:{value: counterStyleType}});
-  }
-}
-
 const startAt = Number(getUrlParam('startAt'));
 const endAt = Number(getUrlParam('endAt'));
 const counterStyleType = getUrlParam('counterStyleType');
@@ -44,7 +37,6 @@ const status = document.querySelector('#status');
 hideBtn.addEventListener('click', (evt) => resetGrid(false));
 showBtn.addEventListener('click', (evt) => resetGrid(true));
 randBtn.addEventListener('click', (evt) => setRandomGridValues(getRandomInput()));
-// resetBtn.addEventListener('click', (evt) => onReset())
 
 const counterTypes = ['decimal','decimal-leading-zero','arabic-indic','armenian','upper-armenian','lower-armenian','bengali','cambodian','khmer','cjk-decimal','devanagari','georgian','gujarati','gurmukhi','hebrew','kannada','lao','malayalam','mongolian','myanmar','oriya','persian','lower-roman','upper-roman','tamil','telugu','thai','tibetan']
 
@@ -154,13 +146,6 @@ const dangerouslySetCounterType = (evt) => {
   document.styleSheets[1].cssRules[21].style.content = `counter(${CSS_COUNTER}, ${evt.target.value})`
 }
 
-// const onReset = () => {
-//   destroyAll();
-//   resetValues(199, -4);
-//   resetCSSCounter(getOffsetValue(), CSS_COUNTER);
-//   render();
-// }
-
 const resetValues = (count, offset) => {
   countInput.value = count;
   offsetInput.value = offset;
@@ -174,55 +159,39 @@ const render = () => {
 }
 
 const animate = (callback) => {
-  return new Promise(resolve => setTimeout(() => {
-    const checkedNodes = getNodes().filter(node => node.querySelector('input').checked);
-    const uncheckedNodes = getNodes().filter(node => node.querySelector('input').checked == false);
-
-    // setTimeout(() => {
-    //   if (checkedNodes.length === 0) {
-    //     console.log('end animation');
-    //     selectRandom(selectRandom)
-    //     resolve();
-    //   }
-    // }, 3000);
-    
-    const randVal = Math.random();
-    const randIndexBool = randVal > 0.5;
-    const randIndex = Math.floor(randVal * checkedNodes.length);
-    const randomEl = checkedNodes[randIndex];
-    const randomElInput = randomEl.querySelector('input');
-    
-    randomEl.setAttribute('data-tracked', 'tracked');
-
+  return new Promise(resolve =>
     setTimeout(() => {
-      randomEl.removeAttribute('data-tracked');
-      randomElInput.checked = false;
-    }, Math.random() * (Math.random() * 1000000));
+      const checkedNodes = getNodes().filter(node => node.querySelector('input').checked);
+      // const uncheckedNodes = getNodes().filter(node => node.querySelector('input').checked == false);
 
-    // setTimeout(() => {
-    //   const urandVal = Math.random();
-    //   const urandIndexBool = urandVal > 0.5;
-    //   const urandIndex = Math.floor(Math.random(uncheckedNodes.length) * 100);
-    //   const urandomEl = uncheckedNodes[urandIndex];
-    //   const urandomElInput =  urandomEl.querySelector('input');
-    //   // urandomEl.setAttribute('data-tracked', urandIndexBool ? 'tracked-low' : 'tracked-high');
-    //   urandomElInput.checked = true;
-    //   setTimeout(() => {
-    //       urandomEl.removeAttribute('data-trackedb');
-    //       urandomElInput.checked = true;
-    //     }, Math.random() * (Math.random() * 1000000));
-    //     urandomEl.setAttribute('data-tracked', 'trackedb');
-    // }, Math.random() * 225)
-    
-    animate();
-    resolve();
-  }, 1000))
+      const randVal = Math.random();
+      const randIndexBool = randVal > 0.5;
+      const randIndex = Math.floor(randVal * checkedNodes.length);
+      const randomEl = checkedNodes[randIndex];
+      const randomElInput = randomEl.querySelector('input');
+      
+      randomEl.setAttribute('data-tracked', 'tracked');
+
+      setTimeout(() => {
+        randomEl.removeAttribute('data-tracked');
+        randomElInput.checked = false;
+      }, Math.random() * (Math.random() * 1000000));
+
+      animate();
+      resolve();
+    }, 1000)
+  )
 }
 
 const init = (cssCounterRef) => {
   renderTypeSelector(defaultCounterStyleType);
   resetCSSCounter(getOffsetValue(), cssCounterRef);
-  handleUrlParams();
+
+  if (hasUrlParams()) {
+    resetValues(endAt, startAt);
+    dangerouslySetCounterType({target:{value: counterStyleType}});
+  }
+
   render();
   animate();
 }
