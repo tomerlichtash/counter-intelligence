@@ -36,7 +36,7 @@ const status = document.querySelector('#status');
 // ui events
 hideBtn.addEventListener('click', (evt) => resetGrid(false));
 showBtn.addEventListener('click', (evt) => resetGrid(true));
-randBtn.addEventListener('click', (evt) => setRandomGridValues(getRandomInput()));
+randBtn.addEventListener('click', (evt) => setRandomGridValues());
 
 const counterTypes = ['decimal','decimal-leading-zero','arabic-indic','armenian','upper-armenian','lower-armenian','bengali','cambodian','khmer','cjk-decimal','devanagari','georgian','gujarati','gurmukhi','hebrew','kannada','lao','malayalam','mongolian','myanmar','oriya','persian','lower-roman','upper-roman','tamil','telugu','thai','tibetan']
 
@@ -54,17 +54,21 @@ const renderTypeSelector = (defaultStyleType) => {
 // inputs
 countInput.addEventListener('change', (evt) => onCountChange())
 offsetInput.addEventListener('change', (evt) => onOffsetChange())
-counterTypeSelector.addEventListener('change', (evt) => dangerouslySetCounterType(evt))
+counterTypeSelector.addEventListener('change', (evt) => dangerouslySetCounterType(CSS_COUNTER, evt.target.value))
 
 // css counter
 document.body.appendChild(counterResetStyleTag);
+
+const setStatus = (msg) => {
+  status.innerHTML = msg;
+}
 
 const createNode = (index) => {
   const el = document.createElement('label');
   const input = document.createElement('input')
   const span = document.createElement('span');
   input.type = 'checkbox';
-  input.checked = false;
+  input.checked = Math.random() > 0.5;
   input.addEventListener('change', () => updateStatus())
   el.appendChild(input);
   el.appendChild(span);
@@ -85,30 +89,28 @@ const getInputs = () => {
   return getNodes().map(label => label.querySelector('input[type="checkbox"]'));
 }
 
-const getRandomInput = () => {
-  const inputs = getInputs();
-  return inputs.map((d, index) => Math.floor(Math.random() * inputs.length) % 2); 
-}
-
 const resetGrid = (isChecked) => {
   getInputs().map((input, index) => input.checked = isChecked || false);
   updateStatus();
 }
 
 const destroyAll = () => {
-  getNodes().map((d, index) => rootNode.removeChild(d));
+  getNodes().map((child, index) => rootNode.removeChild(child));
   items = [];
 }
 
-const setRandomGridValues = (vals) => {
+const setRandomGridValues = () => {
+  const inputs = getInputs();
+  const randVals = inputs.map((d, index) => Math.floor(Math.random() * inputs.length) % 2); 
   resetGrid();
-  vals.map((r, index) => getInputs()[index].checked = r > 0);
+  randVals.map((r, index) => getInputs()[index].checked = r);
   updateStatus();
 }
 
 const updateStatus = () => {
-  const current = getInputs().filter((d, index) => d.checked);
-  status.innerHTML = `${current.length}/${getInputs().length}`;
+  const inputs = getInputs();
+  const current = inputs.filter((input, index) => input.checked);
+  setStatus(`${current.length}/${inputs.length}`)
 }
 
 const getOffsetValue = () => {
@@ -142,8 +144,8 @@ const onCountChange = () => {
   render();
 }
 
-const dangerouslySetCounterType = (evt) => {
-  document.styleSheets[1].cssRules[21].style.content = `counter(${CSS_COUNTER}, ${evt.target.value})`
+const dangerouslySetCounterType = (cssCounterRef, counterType) => {
+  document.styleSheets[1].cssRules[21].style.content = `counter(${cssCounterRef}, ${counterType})`
 }
 
 const resetValues = (count, offset) => {
@@ -167,6 +169,8 @@ const animate = (callback) => {
       const randVal = Math.random();
       const randIndexBool = randVal > 0.5;
       const randIndex = Math.floor(randVal * checkedNodes.length);
+      
+      debugger;
       const randomEl = checkedNodes[randIndex];
       const randomElInput = randomEl.querySelector('input');
       
@@ -189,7 +193,7 @@ const init = (cssCounterRef) => {
 
   if (hasUrlParams()) {
     resetValues(endAt, startAt);
-    dangerouslySetCounterType({target:{value: counterStyleType}});
+    dangerouslySetCounterType(CSS_COUNTER, counterStyleType);
   }
 
   render();
