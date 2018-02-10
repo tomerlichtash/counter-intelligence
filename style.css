@@ -16,7 +16,7 @@ a, button, nav label {
 
 header {
   user-select: none;
-  background: rgba(0,0,0,.1);
+  background: rgba(255,255,255,.5);
   position: fixed;
   top: 0;
   left: 0;
@@ -24,11 +24,12 @@ header {
   z-index: 1000;
   direction: ltr;
   text-align: left;
+  border-bottom: 1px solid;
 }
 
 header h1 {
-  background: purple;
-  color: white;
+  border-right: 1px solid;
+  text-align: left;
   font-size: 1rem;
   padding: 0 1rem;
   letter-spacing: 1px;
@@ -43,6 +44,8 @@ header p {
   text-transform: lowercase;
   margin: 0;
   padding: 0 1rem;
+  text-align: center;
+  display: block;
 }
 
 header h1, header p {
@@ -55,6 +58,7 @@ nav {
   line-height: 3rem;
   float: right;
   margin-right: 1rem;
+  border-left: 1px solid;
 }
 nav ul {
   display: inline-block;
@@ -119,6 +123,8 @@ input[type="checkbox"] {
 header ~ label {
   counter-increment: my-counter;
   cursor: pointer;
+  transition: all 5000ms ease-in;
+  transform: rotate(0deg);
 }
 
 header ~ label span::before {
@@ -140,7 +146,7 @@ header ~ label span:hover::before {
 }
 
 input:first-child ~ span::before {
-  transform: rotate(0deg);
+  /* transform: rotate(0deg); */
   transition: transform 225ms ease-in-out;
 }
 
@@ -149,7 +155,9 @@ input:first-child:checked ~ span::before {
   background: lightgreen;
   content: counter(my-counter, hebrew);
   direction: rtl;
-  transform: rotate(3600deg);
+  transition: all 225ms ease-in-out;
+  box-shadow: 0 0 0 0rem rgba(0,0,0,.0);
+  /* transform: rotate(3600deg); */
 }
 
 .status {
@@ -158,3 +166,28 @@ input:first-child:checked ~ span::before {
   bottom: 1rem;
   left: 1rem;
 }
+
+[data-tracked="tracked"] {
+  /* transition: all 500ms ease-in; */
+  opacity: 0;
+}
+
+[data-tracked="tracked"] span::before {
+  transform: rotate(360000deg);
+}
+[data-tracked="tracked"] input:first-child:checked ~ span::before {
+  background: gold;
+  color: black;
+  box-shadow: 0 0 0 2rem rgba(0,0,0,.5);
+}
+
+[data-tracked="trackedb"] input:first-child:checked ~ span::before {
+  background: royalblue;
+  color: black;
+  box-shadow: 0 0 0 2rem rgba(0,0,0,.5);
+}
+
+/* [data-tracked="tracked-high"] span::before {
+  background: red;
+
+} */

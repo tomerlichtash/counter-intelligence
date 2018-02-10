@@ -1,8 +1,35 @@
-let once = false;
-let counterReset = document.createElement('style');
-let defaultType = 'hebrew';
-let items = [];
+const CSS_COUNTER = 'my-counter';
 
+let nodes = [];
+let counterResetStyleTag = document.createElement('style');
+let defaultCounterStyleType = 'hebrew';
+
+// url params
+const getUrlParam = (name, url) => {
+  if (!url) url = location.href;
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = '[\\?&]' + name + '=([^&#]*)';
+  var regex = new RegExp(regexS);
+  var results = regex.exec(url);
+  return results == null ? null : results[1];
+}
+
+const hasUrlParams = () => {
+  return typeof startAt == 'number' && typeof endAt == 'number' && typeof counterStyleType == 'string'
+}
+
+const handleUrlParams =() => {
+  if (hasUrlParams()) {
+    resetValues(endAt, startAt);
+    dangerouslySetCounterType({target:{value: counterStyleType}});
+  }
+}
+
+const startAt = Number(getUrlParam('startAt'));
+const endAt = Number(getUrlParam('endAt'));
+const counterStyleType = getUrlParam('counterStyleType');
+
+// ui dom refs
 const rootNode = document.querySelector('body');
 const countInput = document.querySelector('#count');
 const offsetInput = document.querySelector('#offset');
@@ -12,165 +39,192 @@ const randBtn = document.querySelector('#rand');
 const resetBtn = document.querySelector('#reset');
 const counterTypeSelector = document.querySelector('#counterTypeSelector');
 const status = document.querySelector('#status');
-const counterTypes = ["decimal", "decimal-leading-zero", "arabic-indic", "armenian", "upper-armenian", "lower-armenian", "bengali", "cambodian", "khmer", "cjk-decimal", "devanagari", "georgian", "gujarati", "gurmukhi", "hebrew", "kannada", "lao", "malayalam", "mongolian", "myanmar", "oriya", "persian", "lower-roman", "upper-roman", "tamil", "telugu", "thai", "tibetan"]
 
+// ui events
+hideBtn.addEventListener('click', (evt) => resetGrid(false));
+showBtn.addEventListener('click', (evt) => resetGrid(true));
+randBtn.addEventListener('click', (evt) => setRandomGridValues(getRandomInput()));
+// resetBtn.addEventListener('click', (evt) => onReset())
+
+const counterTypes = ['decimal','decimal-leading-zero','arabic-indic','armenian','upper-armenian','lower-armenian','bengali','cambodian','khmer','cjk-decimal','devanagari','georgian','gujarati','gurmukhi','hebrew','kannada','lao','malayalam','mongolian','myanmar','oriya','persian','lower-roman','upper-roman','tamil','telugu','thai','tibetan']
+
+// list-style-type selector
 const renderTypeSelector = (defaultStyleType) => {
   return counterTypes.map(type => {
     const option = document.createElement('option');
     option.value = type;
     option.innerHTML = type.toUpperCase();
-    if (type == defaultStyleType) {
-      option.selected = true;
-    }
+    option.selected = type === defaultStyleType;
     counterTypeSelector.appendChild(option)
   });
 }
 
-const randomize = () => {
-  return getItems().map((d, index) => Math.floor(Math.random() * getItems().length) % 2); 
-}
+// inputs
+countInput.addEventListener('change', (evt) => onCountChange())
+offsetInput.addEventListener('change', (evt) => onOffsetChange())
+counterTypeSelector.addEventListener('change', (evt) => dangerouslySetCounterType(evt))
 
-const createNode = () => {
+// css counter
+document.body.appendChild(counterResetStyleTag);
+
+const createNode = (index) => {
   const el = document.createElement('label');
   const input = document.createElement('input')
   const span = document.createElement('span');
   input.type = 'checkbox';
-  input.checked = true;
-  input.addEventListener('click', () => count())
+  input.checked = false;
+  input.addEventListener('change', () => updateStatus())
   el.appendChild(input);
   el.appendChild(span);
+  el.setAttribute('data-computed-index', index);
   return el;
 }
 
-const getNodes = () => {
-  return Array.prototype.slice.call(items);
+const addNode = (node) => {
+  nodes.push(node);
+  document.body.appendChild(node);
 }
 
-const getItems = () => {
+const getNodes = () => {
+  return Array.prototype.slice.call(nodes);
+}
+
+const getInputs = () => {
   return getNodes().map(label => label.querySelector('input[type="checkbox"]'));
 }
 
-const resetGrid = (val) => {
-  getItems().map((d, index) => d.checked = val || false);
-  count();
-  return val;
+const getRandomInput = () => {
+  const inputs = getInputs();
+  return inputs.map((d, index) => Math.floor(Math.random() * inputs.length) % 2); 
+}
+
+const resetGrid = (isChecked) => {
+  getInputs().map((input, index) => input.checked = isChecked || false);
+  updateStatus();
 }
 
 const destroyAll = () => {
-  getNodes().map((d, index) => {
-    rootNode.removeChild(d);
-  });
+  getNodes().map((d, index) => rootNode.removeChild(d));
   items = [];
 }
 
-const select = (values) => {
+const setRandomGridValues = (vals) => {
   resetGrid();
-  values.map((r, index) => getItems()[index].checked = r>0);
-  count();
+  vals.map((r, index) => getInputs()[index].checked = r > 0);
+  updateStatus();
 }
 
-const count = () => {
-  const current = getItems().filter((d, index) => d.checked);
-  status.innerHTML = `${current.length}/${getItems().length}`;
+const updateStatus = () => {
+  const current = getInputs().filter((d, index) => d.checked);
+  status.innerHTML = `${current.length}/${getInputs().length}`;
 }
 
-const getOffsetInput = () => {
+const getOffsetValue = () => {
   return Number(offsetInput.value);
 }
 
-const getItemCounterValue = () => {
+const getCountValue = () => {
   return Number(countInput.value);
 }
 
-const resetCounter = (limit) => {
-  counterReset.innerHTML = `body{counter-reset: my-counter ${limit}}`;
+const resetCSSCounter = (limit, counterName) => {
+  counterResetStyleTag.innerHTML = `body{counter-reset: ${counterName} ${limit}}`;
+}
+
+const resetAll = (cssResetVal) => {
+  destroyAll();
+  resetCSSCounter(cssResetVal, CSS_COUNTER);
 }
 
 const onOffsetChange = () => {
-  const offsetInput = getOffsetInput();
-  const itemsCount = getItemCounterValue();
-
-  if (itemsCount < offsetInput) {
-    destroyAll();
-    resetCounter(-1);
+  if (getCountValue() < getOffsetValue()) {
+    resetAll(-1);
     return false;
   }
-
-  destroyAll();
-  resetCounter(getOffsetInput());
+  resetAll();
   render();
 }
 
 const onCountChange = () => {
-  destroyAll();
-  resetCounter(getOffsetInput());
+  resetAll(getOffsetValue());
   render();
 }
 
-const render = () => {
-  const ln = getItemCounterValue() - getOffsetInput();
-
-  if (ln < 0) {
-    return resetGrid(false);
-  }
-
-  Array(ln).fill().map(i => {
-    const el = createNode();
-    items.push(el);
-    document.body.appendChild(el);
-  });
-
-  count();
+const dangerouslySetCounterType = (evt) => {
+  document.styleSheets[1].cssRules[21].style.content = `counter(${CSS_COUNTER}, ${evt.target.value})`
 }
 
-const onCounterTypeSelectorChange = (evt) => {
-  document.styleSheets[1].cssRules[21].style.content = `counter(my-counter, ${evt.target.value})`
-}
-
-const onReset = (defaultType) => {
-  destroyAll();
-  resetValues(199, -4);
-  resetCounter(getOffsetInput());
-  render();
-}
+// const onReset = () => {
+//   destroyAll();
+//   resetValues(199, -4);
+//   resetCSSCounter(getOffsetValue(), CSS_COUNTER);
+//   render();
+// }
 
 const resetValues = (count, offset) => {
   countInput.value = count;
   offsetInput.value = offset;
 }
 
-const getUrlParam = (name, url) => {
-  if (!url) url = location.href;
-  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-  var regexS = "[\\?&]" + name + "=([^&#]*)";
-  var regex = new RegExp( regexS );
-  var results = regex.exec( url );
-  return results == null ? null : results[1];
+const render = () => {
+  const nodeCount = getCountValue() - getOffsetValue();
+  if (nodeCount < 0) resetGrid(false);
+  Array(nodeCount).fill().map((n, index) => addNode(createNode(index)));
+  updateStatus();
 }
 
-hideBtn.addEventListener('click', (evt) => resetGrid(false));
-showBtn.addEventListener('click', (evt) => resetGrid(true));
-randBtn.addEventListener('click', (evt) => select(randomize()));
-// resetBtn.addEventListener('click', (evt) => onReset())
-countInput.addEventListener('change', (evt) => onCountChange())
-offsetInput.addEventListener('change', (evt) => onOffsetChange())
-counterTypeSelector.addEventListener('change', (evt) => onCounterTypeSelectorChange(evt))
+const animate = (callback) => {
+  return new Promise(resolve => setTimeout(() => {
+    const checkedNodes = getNodes().filter(node => node.querySelector('input').checked);
+    const uncheckedNodes = getNodes().filter(node => node.querySelector('input').checked == false);
 
-document.body.appendChild(counterReset);
+    // setTimeout(() => {
+    //   if (checkedNodes.length === 0) {
+    //     console.log('end animation');
+    //     selectRandom(selectRandom)
+    //     resolve();
+    //   }
+    // }, 3000);
+    
+    const randVal = Math.random();
+    const randIndexBool = randVal > 0.5;
+    const randIndex = Math.floor(randVal * checkedNodes.length);
+    const randomEl = checkedNodes[randIndex];
+    const randomElInput = randomEl.querySelector('input');
+    
+    randomEl.setAttribute('data-tracked', 'tracked');
 
-const startAt = Number(getUrlParam('startAt'));
-const endAt = Number(getUrlParam('endAt'));
-const counterStyleType = getUrlParam('counterStyleType');
+    setTimeout(() => {
+      randomEl.removeAttribute('data-tracked');
+      randomElInput.checked = false;
+    }, Math.random() * (Math.random() * 1000000));
 
-if (typeof startAt == 'number' && typeof endAt == 'number' && typeof counterStyleType == 'string') {
-  renderTypeSelector(counterStyleType);
-  resetValues(endAt, startAt);
-  resetCounter(startAt);
-  onCounterTypeSelectorChange({target:{value: counterStyleType}});
-  render();
-} else {
-  renderTypeSelector(defaultType);
-  resetCounter(getOffsetInput());
-  render();
-  select(randomize());
+    // setTimeout(() => {
+    //   const urandVal = Math.random();
+    //   const urandIndexBool = urandVal > 0.5;
+    //   const urandIndex = Math.floor(Math.random(uncheckedNodes.length) * 100);
+    //   const urandomEl = uncheckedNodes[urandIndex];
+    //   const urandomElInput =  urandomEl.querySelector('input');
+    //   // urandomEl.setAttribute('data-tracked', urandIndexBool ? 'tracked-low' : 'tracked-high');
+    //   urandomElInput.checked = true;
+    //   setTimeout(() => {
+    //       urandomEl.removeAttribute('data-trackedb');
+    //       urandomElInput.checked = true;
+    //     }, Math.random() * (Math.random() * 1000000));
+    //     urandomEl.setAttribute('data-tracked', 'trackedb');
+    // }, Math.random() * 225)
+    
+    animate();
+    resolve();
+  }, 1000))
 }
+
+const init = (cssCounterRef) => {
+  renderTypeSelector(defaultCounterStyleType);
+  resetCSSCounter(getOffsetValue(), cssCounterRef);
+  handleUrlParams();
+  render();
+  animate();
+}
+
+init(CSS_COUNTER);
