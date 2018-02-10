@@ -32,7 +32,7 @@ header {
 header h1 {
   /* border-right: 1px solid; */
   text-align: left;
-  font-size: 1rem;
+  font-size: 2vh;
   padding: 0 1rem;
   letter-spacing: 1px;
   margin: 0;
@@ -149,10 +149,12 @@ header ~ label span:hover::before {
   color: #fff;
 }
 
+/* label > input:first-child:checked ~ span::before {
+  content: counter(my-counter, hebrew);
+} */
 input:first-child:checked ~ span::before {
   color: green;
   background: lightgreen;
-  content: counter(my-counter, hebrew);
   direction: rtl;
   /* transition: all 225ms ease-in-out; */
   box-shadow: 0 0 0 0rem rgba(0,0,0,.0);
@@ -174,7 +176,7 @@ header ~ label span::before {
   /* box-shadow: inset 0 0 1rem rgba(0, 0, 0, 1); */
   /* box-shadow: 0 0 0 transparent; */
   font-weight: 100;
-  opacity: 0;
+  opacity: .2;
   position: relative;
   /* left: -100px; */
   transition: all 425ms ease-in-out;
@@ -186,6 +188,92 @@ header ~ label[data-tracked] span::before {
   left: 0;
   /* box-shadow: inset 0 0 100rem #000; */
   /* font-weight: 900; */
+}
+
+
+body[data-list-type="decimal"] label span::before {
+  content: counter(my-counter, decimal);
+}
+body[data-list-type="decimal-leading-zero"] label span::before {
+  content: counter(my-counter, decimal-leading-zero);
+}
+body[data-list-type="arabic-indic"] label span::before {
+  content: counter(my-counter, arabic-indic);
+}
+body[data-list-type="armenian"] label span::before {
+  content: counter(my-counter, armenian);
+}
+body[data-list-type="upper-armenian"] label span::before {
+  content: counter(my-counter, upper-armenian);
+}
+body[data-list-type="lower-armenian"] label span::before {
+  content: counter(my-counter, lower-armenian);
+}
+body[data-list-type="bengali"] label span::before {
+  content: counter(my-counter, bengali);
+}
+body[data-list-type="cambodian"] label span::before {
+  content: counter(my-counter, cambodian);
+}
+body[data-list-type="khmer"] label span::before {
+  content: counter(my-counter, khmer);
+}
+body[data-list-type="cjk-decimal"] label span::before {
+  content: counter(my-counter, cjk-decimal);
+}
+body[data-list-type="devanagari"] label span::before {
+  content: counter(my-counter, devanagari);
+}
+body[data-list-type="georgian"] label span::before {
+  content: counter(my-counter, georgian);
+}
+body[data-list-type="gujarati"] label span::before {
+  content: counter(my-counter, gujarati);
+}
+body[data-list-type="gurmukhi"] label span::before {
+  content: counter(my-counter, gurmukhi);
+}
+body[data-list-type="hebrew"] label span::before {
+  content: counter(my-counter, hebrew);
+}
+body[data-list-type="kannada"] label span::before {
+  content: counter(my-counter, kannada);
+}
+body[data-list-type="lao"] label span::before {
+  content: counter(my-counter, lao);
+}
+body[data-list-type="malayalam"] label span::before {
+  content: counter(my-counter, malayalam);
+}
+body[data-list-type="mongolian"] label span::before {
+  content: counter(my-counter, mongolian);
+}
+body[data-list-type="myanmar"] label span::before {
+  content: counter(my-counter, myanmar);
+}
+body[data-list-type="oriya"] label span::before {
+  content: counter(my-counter, oriya);
+}
+body[data-list-type="persian"] label span::before {
+  content: counter(my-counter, persian);
+}
+body[data-list-type="lower-roman"] label span::before {
+  content: counter(my-counter, lower-roman);
+}
+body[data-list-type="upper-roman"] label span::before {
+  content: counter(my-counter, upper-roman);
+}
+body[data-list-type="tamil"] label span::before {
+  content: counter(my-counter, tamil);
+}
+body[data-list-type="telugu"] label span::before {
+  content: counter(my-counter, telugu);
+}
+body[data-list-type="thai"] label span::before {
+  content: counter(my-counter, thai);
+}
+body[data-list-type="tibetan"] label span::before {
+  content: counter(my-counter, tibetan);
 }
 
 

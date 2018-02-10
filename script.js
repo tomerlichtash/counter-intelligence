@@ -2,6 +2,7 @@ const CSS_COUNTER = 'my-counter';
 
 let nodes = [];
 let counterResetStyleTag = document.createElement('style');
+let listStyleTypeTag = document.createElement('style');
 let defaultCounterStyleType = 'hebrew';
 
 // url params
@@ -54,10 +55,11 @@ const renderTypeSelector = (defaultStyleType) => {
 // inputs
 countInput.addEventListener('change', (evt) => onCountChange())
 offsetInput.addEventListener('change', (evt) => onOffsetChange())
-counterTypeSelector.addEventListener('change', (evt) => dangerouslySetCounterType(CSS_COUNTER, evt.target.value))
+counterTypeSelector.addEventListener('change', (evt) => dangerouslySetCounterType(evt.target.value))
 
 // css counter
 document.body.appendChild(counterResetStyleTag);
+document.body.appendChild(listStyleTypeTag);
 
 const setStatus = (msg) => {
   status.innerHTML = msg;
@@ -118,6 +120,7 @@ const getCountValue = () => {
 
 const resetCSSCounter = (limit, counterName) => {
   counterResetStyleTag.innerHTML = `body{counter-reset: ${counterName} ${limit}}`;
+  
 }
 
 const resetAll = (cssResetVal) => {
@@ -140,8 +143,8 @@ const onCountChange = () => {
   render();
 }
 
-const dangerouslySetCounterType = (cssCounterRef, counterType) => {
-  document.styleSheets[1].cssRules[21].style.content = `counter(${cssCounterRef}, ${counterType})`
+const dangerouslySetCounterType = (counterType) => {
+  document.querySelector('body').setAttribute('data-list-type', counterType);
 }
 
 const resetValues = (count, offset) => {
@@ -183,10 +186,10 @@ const animate = (callback) => {
 const init = (cssCounterRef) => {
   renderTypeSelector(defaultCounterStyleType);
   resetCSSCounter(getOffsetValue(), cssCounterRef);
-
+  dangerouslySetCounterType(defaultCounterStyleType);
+  
   if (hasUrlParams()) {
     resetValues(endAt, startAt);
-    dangerouslySetCounterType(CSS_COUNTER, counterStyleType);
   }
 
   render();
