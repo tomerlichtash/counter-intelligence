@@ -3,6 +3,7 @@ body {
   padding: 4rem 0 0;
   text-align: center;
   font-family: 'Miriam Libre', sans-serif;
+  /* background: rgba(0,0,0,.1); */
 }
 
 ul, ol, li {
@@ -24,11 +25,12 @@ header {
   z-index: 1000;
   direction: ltr;
   text-align: left;
-  border-bottom: 1px solid;
+  /* border-bottom: 1px solid; */
+  box-shadow: 0 0 .5rem rgba(0,0,0,.5);
 }
 
 header h1 {
-  border-right: 1px solid;
+  /* border-right: 1px solid; */
   text-align: left;
   font-size: 1rem;
   padding: 0 1rem;
@@ -58,7 +60,7 @@ nav {
   line-height: 3rem;
   float: right;
   margin-right: 1rem;
-  border-left: 1px solid;
+  /* border-left: 1px solid; */
 }
 nav ul {
   display: inline-block;
@@ -123,7 +125,7 @@ input[type="checkbox"] {
 header ~ label {
   counter-increment: my-counter;
   cursor: pointer;
-  transition: all 5000ms ease-in;
+  transition: all 250ms ease-in;
   transform: rotate(0deg);
 }
 
@@ -135,8 +137,10 @@ header ~ label span::before {
   line-height: 5rem;
   width: 5rem;
   height: 5rem;
-  font-weight: 900;
+  font-weight: 100;
   margin: .25rem;
+  font-size: 1.5rem;
+  font-family: 'Bellefair', serif;
 }
 
 header ~ label span:hover::before {
@@ -145,23 +149,47 @@ header ~ label span:hover::before {
   color: #fff;
 }
 
-input:first-child ~ span::before {
-  /* transform: rotate(0deg); */
-  transition: transform 225ms ease-in-out;
-}
-
 input:first-child:checked ~ span::before {
   color: green;
   background: lightgreen;
   content: counter(my-counter, hebrew);
   direction: rtl;
-  transition: all 225ms ease-in-out;
+  /* transition: all 225ms ease-in-out; */
   box-shadow: 0 0 0 0rem rgba(0,0,0,.0);
   /* transform: rotate(3600deg); */
 }
 
+header ~ label:nth-child(2n+0) span::before {
+  /* border: 5px solid blue; */
+  text-indent: -6px;
+  left: 3px;
+  background: red;
+}
+header ~ label:nth-child(2n+1) span::before {
+  /* border: 5px solid red; */
+  text-indent: 6px;
+  left: -3px;
+}
+header ~ label span::before {
+  /* box-shadow: inset 0 0 1rem rgba(0, 0, 0, 1); */
+  /* box-shadow: 0 0 0 transparent; */
+  font-weight: 100;
+  opacity: 0;
+  position: relative;
+  /* left: -100px; */
+  transition: all 425ms ease-in-out;
+}
+header ~ label[data-tracked] span::before {
+  /* opacity: 0; */
+  /* box-shadow: inset 0 0 10rem 10rem rgba(0, 0, 0, 1) */
+  text-indent: 0;
+  left: 0;
+  /* box-shadow: inset 0 0 100rem #000; */
+  /* font-weight: 900; */
+}
+
+
 .status {
-  /* color: #f0f0f0; */
   position: fixed;
   bottom: 1rem;
   left: 1rem;
@@ -169,25 +197,16 @@ input:first-child:checked ~ span::before {
 
 [data-tracked="tracked"] {
   /* transition: all 500ms ease-in; */
-  opacity: 0;
+  opacity: .8;
 }
 
-[data-tracked="tracked"] span::before {
+/* [data-tracked="tracked"] span::before {
   transform: rotate(360000deg);
-}
-[data-tracked="tracked"] input:first-child:checked ~ span::before {
-  background: gold;
-  color: black;
-  box-shadow: 0 0 0 2rem rgba(0,0,0,.5);
-}
-
-[data-tracked="trackedb"] input:first-child:checked ~ span::before {
-  background: royalblue;
-  color: black;
-  box-shadow: 0 0 0 2rem rgba(0,0,0,.5);
-}
-
-/* [data-tracked="tracked-high"] span::before {
-  background: red;
-
 } */
+[data-tracked="tracked"] input:first-child:checked ~ span::before {
+  /* background: rgba(0,0,0,.5); */
+  opacity: 1;
+  /* color: white; */
+  /* box-shadow: 0 0 0 2rem rgba(0,0,0,.5); */
+}
+

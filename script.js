@@ -68,7 +68,7 @@ const createNode = (index) => {
   const input = document.createElement('input')
   const span = document.createElement('span');
   input.type = 'checkbox';
-  input.checked = Math.random() > 0.5;
+  input.checked = true; //Math.random() > 0.5;
   input.addEventListener('change', () => updateStatus())
   el.appendChild(input);
   el.appendChild(span);
@@ -92,11 +92,6 @@ const getInputs = () => {
 const resetGrid = (isChecked) => {
   getInputs().map((input, index) => input.checked = isChecked || false);
   updateStatus();
-}
-
-const destroyAll = () => {
-  getNodes().map((child, index) => rootNode.removeChild(child));
-  items = [];
 }
 
 const setRandomGridValues = () => {
@@ -126,8 +121,9 @@ const resetCSSCounter = (limit, counterName) => {
 }
 
 const resetAll = (cssResetVal) => {
-  destroyAll();
+  getNodes().map((child) => document.body.removeChild(child));
   resetCSSCounter(cssResetVal, CSS_COUNTER);
+  items = [];
 }
 
 const onOffsetChange = () => {
@@ -135,7 +131,7 @@ const onOffsetChange = () => {
     resetAll(-1);
     return false;
   }
-  resetAll();
+  resetAll(0);
   render();
 }
 
@@ -170,20 +166,17 @@ const animate = (callback) => {
       const randIndexBool = randVal > 0.5;
       const randIndex = Math.floor(randVal * checkedNodes.length);
       
-      debugger;
       const randomEl = checkedNodes[randIndex];
       const randomElInput = randomEl.querySelector('input');
       
       randomEl.setAttribute('data-tracked', 'tracked');
-
       setTimeout(() => {
         randomEl.removeAttribute('data-tracked');
-        randomElInput.checked = false;
-      }, Math.random() * (Math.random() * 1000000));
+      }, 1450);
 
       animate();
       resolve();
-    }, 1000)
+    }, 200)
   )
 }
 
