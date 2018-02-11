@@ -255,6 +255,13 @@ input:first-child:checked ~ span::before {
   opacity: 1;
 }
 
+[data-play-state="play"] .labels label span::before {
+  opacity: 0;
+}
+[data-play-state="pause"] .labels label span::before {
+  opacity: .5;
+}
+
 .status {
   position: fixed;
   bottom: 1rem;

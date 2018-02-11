@@ -46,13 +46,18 @@ const bindUI = () => {
   pauseBtn.addEventListener('click', () => pauseAnimation());
 };
 
+const setPlayState = (state) => {
+  playState = state;
+  document.querySelector('body').setAttribute('data-play-state', state ? 'play' : 'pause');
+}
+
 const playAnimation = () => {
-	playState = true;
+  setPlayState(true);
 	animate(CSS_COUNTER);
 };
 
 const pauseAnimation = () => {
-	playState = false;
+  setPlayState(false);
 };
 
 // list-style-type selector
@@ -176,7 +181,7 @@ const animate = () => {
 		setTimeout(() => {
 			const checkedNodes = getNodes().filter(node => node.querySelector('input').checked);
 			if (!checkedNodes.length || !playState) {
-				playState = false;
+        setPlayState(false);
 				resolve({playState});
 				return playState;
 			}
