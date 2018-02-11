@@ -30,8 +30,10 @@ const setPlayState = (state) => {
 };
 
 const playAnimation = (counterRef) => {
-	setPlayState(true);
-	animate(counterRef);
+  setPlayState(true);
+  // setRandomGridValues();
+  shuffleGrid();
+  animate(counterRef);
 };
 
 const pauseAnimation = () => {
@@ -167,15 +169,17 @@ const animate = () => {
 	);
 };
 
-// const shuffleGrid = () => {
-// 	setRandomGridValues();
-// 	return new Promise(resolve => {
-// 		setTimeout(() => {
-// 			shuffleGrid();
-// 			resolve();
-// 		}, Math.random() * 5000);
-// 	});
-// };
+const shuffleGrid = () => {
+  setRandomGridValues();
+	return new Promise(resolve => {
+		setTimeout(() => {
+      console.log('shuffle grid')
+      shuffleGrid();
+      // setRandomGridValues();
+			resolve();
+		}, Math.random() * 5000);
+	});
+};
 
 const init = (cssCounterRef, styleType) => {
 	bindUI(UIParts, cssCounterRef);
