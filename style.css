@@ -281,11 +281,13 @@ input:first-child:checked ~ span::before {
     text-shadow: 0 0 0.75em #444;
     box-shadow: 0 0 0.5em rgba(0,0,0,0.5);
     transform: rotate(45deg) scale(0.75,1);
-    font: bold 16px/1.2em Arial, Sans-Serif;
+    font-size: 1em;
+    font-weight: 900;
     -webkit-text-shadow: 0 0 0.75em #444;
     -webkit-box-shadow: 0 0 0.5em rgba(0,0,0,0.5);
     -webkit-transform: rotate(45deg) scale(0.75,1);
     z-index:10;
+    text-transform: lowercase;
 }
 #forkMe:before {
     content: '';
