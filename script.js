@@ -31,9 +31,7 @@ const setPlayState = (state) => {
 
 const playAnimation = (counterRef) => {
   setPlayState(true);
-  // setRandomGridValues();
-  shuffleGrid();
-  animate(counterRef);
+  animate(counterRef).then(() => shuffleGrid());
 };
 
 const pauseAnimation = () => {
@@ -170,12 +168,10 @@ const animate = () => {
 };
 
 const shuffleGrid = () => {
-  setRandomGridValues();
 	return new Promise(resolve => {
 		setTimeout(() => {
-      console.log('shuffle grid')
+      setRandomGridValues();
       shuffleGrid();
-      // setRandomGridValues();
 			resolve();
 		}, Math.random() * 5000);
 	});

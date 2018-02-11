@@ -254,7 +254,7 @@ input:first-child:checked ~ span::before {
 }
 
 [data-play-state="play"] .labels label span::before {
-  opacity: 0;
+  opacity: 0.2;
 }
 [data-play-state="pause"] .labels label span::before {
   opacity: .5;
