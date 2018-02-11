@@ -12,16 +12,15 @@ const hasUrlParams = () => {
 	return typeof startAt == 'number' && typeof endAt == 'number' && typeof customCounterStyleType == 'string';
 };
 
-const bindUI = (cssCounterRef) => {
-  countInput.addEventListener('change', () => onCountChange(cssCounterRef));
-  offsetInput.addEventListener('change', () => onOffsetChange(cssCounterRef));
-  counterTypeSelector.addEventListener('change', (evt) => setCounterType(evt.target.value));
-
-	hideBtn.addEventListener('click', () => resetGrid(false));
-	showBtn.addEventListener('click', () => resetGrid(true));
-	randBtn.addEventListener('click', () => setRandomGridValues());
-	playBtn.addEventListener('click', () => playAnimation(cssCounterRef));
-	pauseBtn.addEventListener('click', () => pauseAnimation());
+const bindUI = (UI, cssCounterRef) => {
+	UI.hideBtn.addEventListener('click', () => resetGrid(false));
+	UI.showBtn.addEventListener('click', () => resetGrid(true));
+	UI.randBtn.addEventListener('click', () => setRandomGridValues());
+	UI.playBtn.addEventListener('click', () => playAnimation(cssCounterRef));
+	UI.pauseBtn.addEventListener('click', () => pauseAnimation());
+  UI.countInput.addEventListener('change', () => onCountChange(cssCounterRef));
+  UI.offsetInput.addEventListener('change', () => onOffsetChange(cssCounterRef));
+  UI.counterTypeSelector.addEventListener('change', (evt) => setCounterType(evt.target.value));
 };
 
 const setPlayState = (state) => {
@@ -179,7 +178,7 @@ const animate = () => {
 // };
 
 const init = (cssCounterRef, styleType) => {
-	bindUI(cssCounterRef);
+	bindUI(UIParts, cssCounterRef);
 
 	if (hasUrlParams()) {
 		resetValues(endAt, startAt);
@@ -194,16 +193,17 @@ const init = (cssCounterRef, styleType) => {
 	playAnimation(cssCounterRef);
 };
 
-// ui parts
-const countInput = document.querySelector('#count');
-const offsetInput = document.querySelector('#offset');
-const hideBtn = document.querySelector('#hide');
-const showBtn = document.querySelector('#show');
-const randBtn = document.querySelector('#rand');
-const playBtn = document.querySelector('#play');
-const pauseBtn = document.querySelector('#pause');
-const counterTypeSelector = document.querySelector('#counterTypeSelector');
-const status = document.querySelector('#status');
+const UIParts = {
+  countInput: document.querySelector('#count'),
+  offsetInput: document.querySelector('#offset'),
+  hideBtn: document.querySelector('#hide'),
+  showBtn: document.querySelector('#show'),
+  randBtn: document.querySelector('#rand'),
+  playBtn: document.querySelector('#play'),
+  pauseBtn: document.querySelector('#pause'),
+  counterTypeSelector: document.querySelector('#counterTypeSelector'),
+  status: document.querySelector('#status')
+}
 
 // consts
 const CSS_COUNTER = 'my-counter';
