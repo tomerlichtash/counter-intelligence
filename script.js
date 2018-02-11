@@ -49,6 +49,7 @@ const bindUI = () => {
 const setPlayState = (state) => {
   playState = state;
   document.querySelector('body').setAttribute('data-play-state', state ? 'play' : 'pause');
+  return playState;
 }
 
 const playAnimation = () => {
@@ -88,11 +89,14 @@ const createNode = () => {
 	const el = document.createElement('label');
 	const input = document.createElement('input');
 	const span = document.createElement('span');
-	input.type = 'checkbox';
+  
+  input.type = 'checkbox';
 	input.checked = Math.random() > 0.5;
-	el.appendChild(input);
+  
+  el.appendChild(input);
 	el.appendChild(span);
-	return el;
+  
+  return el;
 };
 
 const addNode = (node) => {
@@ -141,8 +145,9 @@ const resetCSSCounter = (offset, counterName) => {
 
 const resetAll = (cssResetVal) => {
 	const localNodes = rootNode.querySelectorAll('label');
-	Array.prototype.slice.call(localNodes).map((node) => rootNode.removeChild(node));
-	resetCSSCounter(cssResetVal, CSS_COUNTER);
+	getNodes().map((node) => rootNode.removeChild(node));
+  resetCSSCounter(cssResetVal, CSS_COUNTER);
+  clearNodes();
 	nodes = [];
 };
 
@@ -181,11 +186,10 @@ const animate = () => {
 		setTimeout(() => {
 			const checkedNodes = getNodes().filter(node => node.querySelector('input').checked);
 			if (!checkedNodes.length || !playState) {
-        setPlayState(false);
-				resolve({playState});
+        // setPlayState(false);
+				resolve(setPlayState(false));
 				return playState;
 			}
-      // shuffleGrid();
 			const randVal = Math.random();
 			const randIndex = Math.floor(randVal * checkedNodes.length);
 			const randomEl = checkedNodes[randIndex];
@@ -198,28 +202,29 @@ const animate = () => {
 	);
 };
 
-const shuffleGrid = () => {
-	setRandomGridValues();
-	return new Promise(resolve => {
-		setTimeout(() => {
-			shuffleGrid();
-			resolve();
-		}, Math.random() * 5000);
-	});
-};
+// const shuffleGrid = () => {
+// 	setRandomGridValues();
+// 	return new Promise(resolve => {
+// 		setTimeout(() => {
+// 			shuffleGrid();
+// 			resolve();
+// 		}, Math.random() * 5000);
+// 	});
+// };
 
 const init = (cssCounterRef, styleType) => {
   bindUI();
-
-  resetCSSCounter(Number(getUrlParam('startAt')) || getOffsetValue(), cssCounterRef);
-	renderTypeSelector(styleType);
 
 	if (hasUrlParams()) {
 		resetValues(endAt, startAt);
   }
 
+  resetCSSCounter(Number(getUrlParam('startAt')) || getOffsetValue(), cssCounterRef);
   setCounterType(styleType);
+
+  renderTypeSelector(styleType);
   render();
+
   playAnimation();
 };
 
