@@ -36,14 +36,15 @@ const pauseBtn = document.querySelector('#pause');
 const counterTypeSelector = document.querySelector('#counterTypeSelector');
 const status = document.querySelector('#status');
 
-// ui events
-hideBtn.addEventListener('click', () => resetGrid(false));
-showBtn.addEventListener('click', () => resetGrid(true));
-randBtn.addEventListener('click', () => setRandomGridValues());
-playBtn.addEventListener('click', () => playAnimation());
-pauseBtn.addEventListener('click', () => pauseAnimation());
-
 const counterTypes = ['decimal','decimal-leading-zero','arabic-indic','armenian','upper-armenian','lower-armenian','bengali','cambodian','khmer','cjk-decimal','devanagari','georgian','gujarati','gurmukhi','hebrew','kannada','lao','malayalam','mongolian','myanmar','oriya','persian','lower-roman','upper-roman','tamil','telugu','thai','tibetan'];
+
+const bindUI = () => {
+  hideBtn.addEventListener('click', () => resetGrid(false));
+  showBtn.addEventListener('click', () => resetGrid(true));
+  randBtn.addEventListener('click', () => setRandomGridValues());
+  playBtn.addEventListener('click', () => playAnimation());
+  pauseBtn.addEventListener('click', () => pauseAnimation());
+};
 
 const playAnimation = () => {
 	playState = true;
@@ -83,7 +84,7 @@ const createNode = () => {
 	const input = document.createElement('input');
 	const span = document.createElement('span');
 	input.type = 'checkbox';
-	input.checked = true;
+	input.checked = Math.random() > 0.5;
 	el.appendChild(input);
 	el.appendChild(span);
 	return el;
@@ -158,7 +159,7 @@ const setCounterType = (counterType) => {
 	document.querySelector('body').setAttribute('data-list-type', counterType);
 };
 
-const resetValues = (count, offset, counterType) => {
+const resetValues = (count, offset) => {
 	countInput.value = count;
   offsetInput.value = offset;
 };
@@ -203,16 +204,18 @@ const shuffleGrid = () => {
 };
 
 const init = (cssCounterRef, styleType) => {
+  bindUI();
+
   resetCSSCounter(Number(getUrlParam('startAt')) || getOffsetValue(), cssCounterRef);
 	renderTypeSelector(styleType);
 
 	if (hasUrlParams()) {
-		resetValues(endAt, startAt, customCounterStyleType);
+		resetValues(endAt, startAt);
   }
 
   setCounterType(styleType);
-	render();
-	playAnimation();
+  render();
+  playAnimation();
 };
 
 init(CSS_COUNTER, customCounterStyleType || defaultCounterStyleType);
