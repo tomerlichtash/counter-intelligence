@@ -14,10 +14,12 @@ const hasUrlParams = () => {
 const bindUI = (UI, cssCounterRef) => {
 	UI.hideBtn.addEventListener('click', () => resetGrid(false));
 	UI.showBtn.addEventListener('click', () => resetGrid(true));
-	UI.randBtn.addEventListener('click', () => setRandomGridValues());
+  UI.randBtn.addEventListener('click', () => setRandomGridValues());
 	UI.playBtn.addEventListener('click', () => playAnimation(cssCounterRef));
 	UI.pauseBtn.addEventListener('click', () => setPlayState(false));
-	UI.countInput.addEventListener('change', () => onCountChange(cssCounterRef));
+
+	UI.togglePlay.addEventListener('change', () => toggleAnimation());
+  UI.countInput.addEventListener('change', () => onCountChange(cssCounterRef));
 	UI.offsetInput.addEventListener('change', () => onOffsetChange(cssCounterRef));
 	UI.counterTypeSelector.addEventListener('change', (evt) => setCounterType(evt.target.value));
 };
@@ -27,6 +29,11 @@ const setPlayState = (state) => {
 	document.querySelector('body').setAttribute('data-play-state', state ? 'play' : 'pause');
 	return playState;
 };
+
+const toggleAnimation = () => {
+  debugger;
+  setPlayState(!playState);
+}
 
 const playAnimation = (counterRef) => {
 	setPlayState(true);
@@ -226,6 +233,7 @@ const UIParts = {
 	hideBtn: document.querySelector('#hide'),
 	showBtn: document.querySelector('#show'),
 	randBtn: document.querySelector('#rand'),
+	togglePlay: document.querySelector('#togglePlay'),
 	playBtn: document.querySelector('#play'),
 	pauseBtn: document.querySelector('#pause'),
 	counterTypeSelector: document.querySelector('#counterTypeSelector'),
@@ -334,7 +342,17 @@ const measurePositionUp = (el, $el) => {
 }
 
 const handleKeyDown = (e) => {
+  const input = selectedNode.querySelector('input');
   switch(e.which) {
+    case 83:
+      getInputs().map(i => i.checked = false);
+      input.checked = true;
+      break;
+    
+    case 67:
+      getInputs().map(i => i.checked = false);
+      break;
+
     case 37: // left
       selectPreviousItem(selectedNode);
       break;
@@ -352,7 +370,6 @@ const handleKeyDown = (e) => {
       break;
 
     case 13: // enter
-      const input = selectedNode.querySelector('input');
       input.checked = !input.checked;
       break;
 
@@ -360,11 +377,12 @@ const handleKeyDown = (e) => {
       console.log(e.which);
       return false;
   }
+
   e.preventDefault(); 
 }
 init(CSS_COUNTER, customCounterStyleType || defaultCounterStyleType)
   .then(() => {
-    setPlayState(false);
+    // setPlayState(false);
     selectedNode = getNodes()[0];
     selectedNode.setAttribute('data-selected', 'selected');
     // selectedNode.querySelector('input').checked = true;
