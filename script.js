@@ -16,10 +16,10 @@ const bindUI = (UI, cssCounterRef) => {
 	UI.showBtn.addEventListener('click', () => resetGrid(true));
 	UI.randBtn.addEventListener('click', () => setRandomGridValues());
 	UI.playBtn.addEventListener('click', () => playAnimation(cssCounterRef));
-	UI.pauseBtn.addEventListener('click', () => pauseAnimation());
-  UI.countInput.addEventListener('change', () => onCountChange(cssCounterRef));
-  UI.offsetInput.addEventListener('change', () => onOffsetChange(cssCounterRef));
-  UI.counterTypeSelector.addEventListener('change', (evt) => setCounterType(evt.target.value));
+	UI.pauseBtn.addEventListener('click', () => setPlayState(false));
+	UI.countInput.addEventListener('change', () => onCountChange(cssCounterRef));
+	UI.offsetInput.addEventListener('change', () => onOffsetChange(cssCounterRef));
+	UI.counterTypeSelector.addEventListener('change', (evt) => setCounterType(evt.target.value));
 };
 
 const setPlayState = (state) => {
@@ -29,12 +29,8 @@ const setPlayState = (state) => {
 };
 
 const playAnimation = (counterRef) => {
-  setPlayState(true);
-  animate(counterRef).then(() => shuffleGrid());
-};
-
-const pauseAnimation = () => {
-	setPlayState(false);
+	setPlayState(true);
+	animate(counterRef).then(() => shuffleGrid());
 };
 
 const renderTypeSelector = (defaultStyleType) => {
@@ -43,7 +39,7 @@ const renderTypeSelector = (defaultStyleType) => {
 		option.value = type;
 		option.innerHTML = type.toUpperCase();
 		option.selected = type === defaultStyleType;
-		counterTypeSelector.appendChild(option);
+		UIParts.counterTypeSelector.appendChild(option);
 	});
 };
 
@@ -134,8 +130,8 @@ const setCounterType = (counterType) => {
 };
 
 const resetValues = (count, offset) => {
-	countInput.value = count;
-	offsetInput.value = offset;
+	UIParts.countInput.value = count;
+	UIParts.offsetInput.value = offset;
 };
 
 const render = () => {
@@ -145,19 +141,27 @@ const render = () => {
 	updateStatus();
 };
 
+const getCheckedNodes = () => {
+	return getNodes().filter(node => node.querySelector('input').checked);
+};
+
 const animate = () => {
 	return new Promise(resolve =>
 		setTimeout(() => {
-			const checkedNodes = getNodes().filter(node => node.querySelector('input').checked);
+			const checkedNodes = getCheckedNodes();
+      
 			if (!checkedNodes.length || !playState) {
 				resolve(setPlayState(false));
 				return playState;
 			}
+      
 			const randVal = Math.random();
 			const randIndex = Math.floor(randVal * checkedNodes.length);
 			const randomEl = checkedNodes[randIndex];
+      
 			randomEl.querySelector('input');
 			randomEl.setAttribute('data-tracked', 'tracked');
+      
 			setTimeout(() => randomEl.removeAttribute('data-tracked'), 1450);
 			animate();
 			resolve();
@@ -168,8 +172,8 @@ const animate = () => {
 const shuffleGrid = () => {
 	return new Promise(resolve => {
 		setTimeout(() => {
-      setRandomGridValues();
-      shuffleGrid();
+			setRandomGridValues();
+			shuffleGrid();
 			resolve();
 		}, Math.random() * 5000);
 	});
@@ -192,16 +196,16 @@ const init = (cssCounterRef, styleType) => {
 };
 
 const UIParts = {
-  countInput: document.querySelector('#count'),
-  offsetInput: document.querySelector('#offset'),
-  hideBtn: document.querySelector('#hide'),
-  showBtn: document.querySelector('#show'),
-  randBtn: document.querySelector('#rand'),
-  playBtn: document.querySelector('#play'),
-  pauseBtn: document.querySelector('#pause'),
-  counterTypeSelector: document.querySelector('#counterTypeSelector'),
-  status: document.querySelector('#status')
-}
+	countInput: document.querySelector('#count'),
+	offsetInput: document.querySelector('#offset'),
+	hideBtn: document.querySelector('#hide'),
+	showBtn: document.querySelector('#show'),
+	randBtn: document.querySelector('#rand'),
+	playBtn: document.querySelector('#play'),
+	pauseBtn: document.querySelector('#pause'),
+	counterTypeSelector: document.querySelector('#counterTypeSelector'),
+	status: document.querySelector('#status')
+};
 
 // consts
 const CSS_COUNTER = 'my-counter';
