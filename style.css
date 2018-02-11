@@ -51,6 +51,7 @@ header h1, header p {
 }
 
 nav {
+  /* display: none; */
   float: right;
   text-align: center;
   font-size: .8rem;
@@ -251,10 +252,12 @@ input:first-child:checked ~ span::before {
 
 [data-tracked="tracked"] input:first-child:checked ~ span::before {
   opacity: 1;
+  display: inline-block;
 }
 
 [data-play-state="play"] .labels label span::before {
-  opacity: 0.2;
+  opacity: 0;
+  /* display: none; */
 }
 [data-play-state="pause"] .labels label span::before {
   opacity: .5;

@@ -47,17 +47,23 @@ const setStatus = (msg) => {
 	status.innerHTML = msg;
 };
 
-const createNode = () => {
+const createNode = (index) => {
 	const el = document.createElement('label');
 	const input = document.createElement('input');
 	const span = document.createElement('span');
   
 	input.type = 'checkbox';
-	input.checked = Math.random() > 0.5;
+	input.checked = false; //Math.random() > 0.5;
   
 	el.appendChild(input);
-	el.appendChild(span);
-  
+  el.appendChild(span);
+
+  el.setAttribute('data-debug', index)
+
+  input.addEventListener('change', () => {
+    selectedNode = el;
+  });
+
 	return el;
 };
 
@@ -176,27 +182,37 @@ const shuffleGrid = () => {
         resolve();
         return false;
       }
-			setRandomGridValues();
-			shuffleGrid();
+
+      // UIParts.offsetInput.value = Math.floor(Math.random() * 500);
+      // UIParts.countInput.value = Math.floor(Math.random() * 500);
+      // onOffsetChange();
+      // onCountChange();
+
+			// setRandomGridValues();
+			// shuffleGrid();
 			resolve();
 		}, Math.random() * 5000);
 	});
 };
 
 const init = (cssCounterRef, styleType) => {
-	bindUI(UIParts, cssCounterRef);
+  return new Promise(resolve => {
+    bindUI(UIParts, cssCounterRef);
 
-	if (hasUrlParams()) {
-		resetValues(endAt, startAt);
-	}
+    if (hasUrlParams()) {
+      resetValues(endAt, startAt);
+    }
 
-	resetCSSCounter(Number(getUrlParam('startAt')) || getOffsetValue(), cssCounterRef);
-	setCounterType(styleType);
+    resetCSSCounter(Number(getUrlParam('startAt')) || getOffsetValue(), cssCounterRef);
+    setCounterType(styleType);
 
-	renderTypeSelector(styleType);
-	render();
+    renderTypeSelector(styleType);
+    render();
+    
+    // playAnimation(cssCounterRef);
 
-	playAnimation(cssCounterRef);
+    resolve();
+  });
 };
 
 const UIParts = {
@@ -208,7 +224,12 @@ const UIParts = {
 	playBtn: document.querySelector('#play'),
 	pauseBtn: document.querySelector('#pause'),
 	counterTypeSelector: document.querySelector('#counterTypeSelector'),
-	status: document.querySelector('#status')
+  status: document.querySelector('#status'),
+  downKey: document.querySelector('#downKey'),
+  upKey: document.querySelector('#upKey'),
+  prevKey: document.querySelector('#prevKey'),
+  nextKey: document.querySelector('#nextKey')
+  
 };
 
 // consts
@@ -223,13 +244,98 @@ const listStyleTypeTag = document.createElement('style');
 document.body.appendChild(counterResetStyleTag);
 document.body.appendChild(listStyleTypeTag);
 
+const randomCount = Math.floor(Math.random() * 1500);
+const randomOffset = Math.floor(Math.random() * 1500);
+
 // url params
-const startAt = Number(getUrlParam('startAt'));
-const endAt = Number(getUrlParam('endAt'));
-const customCounterStyleType = getUrlParam('counterStyleType');
+const startAt = Number(getUrlParam('startAt')) || randomOffset;
+const endAt = Number(getUrlParam('endAt')) || randomCount;
+const customCounterStyleType = getUrlParam('counterStyleType') || 'hebrew';
 
 // states
 let nodes = [];
 let playState = null;
+let selectedNode = null;
 
-init(CSS_COUNTER, customCounterStyleType || defaultCounterStyleType);
+// const setSelectedNode = (el) => {
+//   selectedNode.querySelector('input').checked = false;
+//   selectedNode = el.nextElementSibling;
+//   selectedNode.querySelector('input').checked = true;
+// }
+// const setSelectedNodeState = (bool) => {
+//   selectedNode = bool;
+// }
+
+const selectNextItem = (el) => {
+  selectedNode.querySelector('input').checked = false;
+  selectedNode = el.nextElementSibling;
+  selectedNode.querySelector('input').checked = true;
+}
+
+const selectPreviousItem = (el) => {
+  selectedNode.querySelector('input').checked = false;
+  selectedNode = el.previousElementSibling;
+  selectedNode.querySelector('input').checked = true;
+}
+
+const measurePositionDown = (el, $el) => {
+  $el = $el || el;
+  if (!el.nextElementSibling) {
+    return el;
+  }
+  const offsetTop = $el.offsetTop;
+  const offsetLeft = $el.offsetLeft;
+  const nextElOffsetTop = el.nextElementSibling.offsetTop;
+  const nextElOffsetLeft = el.nextElementSibling.offsetLeft;
+  if (offsetTop < nextElOffsetTop) {
+    if (offsetLeft !== nextElOffsetLeft) {
+      return measurePositionDown(el.nextElementSibling, $el);
+    }
+    else if (offsetLeft <= nextElOffsetLeft) {
+      selectedNode.querySelector('input').checked = false;
+      selectedNode = el.nextElementSibling;
+      selectedNode.querySelector('input').checked = true;
+    }
+  } else {
+    return measurePositionDown(el.nextElementSibling, $el);
+  }
+  return el;
+}
+
+const measurePositionUp = (el, $el) => {
+  $el = $el || el;
+  if (!el.previousElementSibling) {
+    return el;
+  }
+  const offsetTop = $el.offsetTop;
+  const offsetLeft = $el.offsetLeft;
+  const nextElOffsetTop = el.previousElementSibling.offsetTop;
+  const nextElOffsetLeft = el.previousElementSibling.offsetLeft;
+  if (offsetTop > nextElOffsetTop) {
+    if (offsetLeft !== nextElOffsetLeft) {
+      return measurePositionUp(el.previousElementSibling, $el);
+    }
+    else if (offsetLeft <= nextElOffsetLeft) {
+      selectedNode.querySelector('input').checked = false;
+      selectedNode = el.previousElementSibling;
+      selectedNode.querySelector('input').checked = true;
+    }
+  } else {
+    return measurePositionUp(el.previousElementSibling, $el);
+  }
+  return el;
+}
+
+init(CSS_COUNTER, customCounterStyleType || defaultCounterStyleType)
+  .then(() => {
+    setPlayState(false);
+    
+    selectedNode = getNodes()[25];
+
+    selectedNode.querySelector('input').checked = true;
+    UIParts.downKey.addEventListener('click', () => measurePositionDown(selectedNode));
+    UIParts.upKey.addEventListener('click', () => measurePositionUp(selectedNode));
+    UIParts.nextKey.addEventListener('click', () => selectNextItem(selectedNode));
+    UIParts.prevKey.addEventListener('click', () => selectPreviousItem(selectedNode));
+    
+});
