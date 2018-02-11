@@ -12,11 +12,15 @@ const hasUrlParams = () => {
 	return typeof startAt == 'number' && typeof endAt == 'number' && typeof customCounterStyleType == 'string';
 };
 
-const bindUI = () => {
+const bindUI = (cssCounterRef) => {
+  countInput.addEventListener('change', () => onCountChange(cssCounterRef));
+  offsetInput.addEventListener('change', () => onOffsetChange(cssCounterRef));
+  counterTypeSelector.addEventListener('change', (evt) => setCounterType(evt.target.value));
+
 	hideBtn.addEventListener('click', () => resetGrid(false));
 	showBtn.addEventListener('click', () => resetGrid(true));
 	randBtn.addEventListener('click', () => setRandomGridValues());
-	playBtn.addEventListener('click', () => playAnimation());
+	playBtn.addEventListener('click', () => playAnimation(cssCounterRef));
 	pauseBtn.addEventListener('click', () => pauseAnimation());
 };
 
@@ -26,9 +30,9 @@ const setPlayState = (state) => {
 	return playState;
 };
 
-const playAnimation = () => {
+const playAnimation = (counterRef) => {
 	setPlayState(true);
-	animate(CSS_COUNTER);
+	animate(counterRef);
 };
 
 const pauseAnimation = () => {
@@ -108,23 +112,23 @@ const resetCSSCounter = (offset, counterName) => {
 	counterResetStyleTag.innerHTML = `body{counter-reset: ${counterName} ${offset}}`;
 };
 
-const resetAll = (cssResetVal) => {
+const resetAll = (cssResetVal, cssCounterRef) => {
 	getNodes().map((node) => rootNode.removeChild(node));
-	resetCSSCounter(cssResetVal, CSS_COUNTER);
+	resetCSSCounter(cssResetVal, cssCounterRef);
 	nodes = [];
 };
 
-const onOffsetChange = () => {
+const onOffsetChange = (cssCounterRef) => {
 	if (getCountValue() < getOffsetValue()) {
 		resetAll(-1);
 		return false;
 	}
-	resetAll(getOffsetValue());
+	resetAll(getOffsetValue(), cssCounterRef);
 	render();
 };
 
-const onCountChange = () => {
-	resetAll(getOffsetValue());
+const onCountChange = (cssCounterRef) => {
+	resetAll(getOffsetValue(), cssCounterRef);
 	render();
 };
 
@@ -149,7 +153,6 @@ const animate = () => {
 		setTimeout(() => {
 			const checkedNodes = getNodes().filter(node => node.querySelector('input').checked);
 			if (!checkedNodes.length || !playState) {
-				// setPlayState(false);
 				resolve(setPlayState(false));
 				return playState;
 			}
@@ -176,7 +179,7 @@ const animate = () => {
 // };
 
 const init = (cssCounterRef, styleType) => {
-	bindUI();
+	bindUI(cssCounterRef);
 
 	if (hasUrlParams()) {
 		resetValues(endAt, startAt);
@@ -188,25 +191,8 @@ const init = (cssCounterRef, styleType) => {
 	renderTypeSelector(styleType);
 	render();
 
-	playAnimation();
+	playAnimation(cssCounterRef);
 };
-
-// states
-let nodes = [];
-let counterResetStyleTag = document.createElement('style');
-let listStyleTypeTag = document.createElement('style');
-let defaultCounterStyleType = 'hebrew';
-let playState = null;
-
-// consts
-const CSS_COUNTER = 'my-counter';
-const rootNode = document.querySelector('.labels');
-const counterTypes = ['decimal','decimal-leading-zero','arabic-indic','armenian','upper-armenian','lower-armenian','bengali','cambodian','khmer','cjk-decimal','devanagari','georgian','gujarati','gurmukhi','hebrew','kannada','lao','malayalam','mongolian','myanmar','oriya','persian','lower-roman','upper-roman','tamil','telugu','thai','tibetan'];
-
-// url params
-const startAt = Number(getUrlParam('startAt'));
-const endAt = Number(getUrlParam('endAt'));
-const customCounterStyleType = getUrlParam('counterStyleType');
 
 // ui parts
 const countInput = document.querySelector('#count');
@@ -219,13 +205,25 @@ const pauseBtn = document.querySelector('#pause');
 const counterTypeSelector = document.querySelector('#counterTypeSelector');
 const status = document.querySelector('#status');
 
-// input change events
-countInput.addEventListener('change', () => onCountChange());
-offsetInput.addEventListener('change', () => onOffsetChange());
-counterTypeSelector.addEventListener('change', (evt) => setCounterType(evt.target.value));
+// consts
+const CSS_COUNTER = 'my-counter';
+const rootNode = document.querySelector('.labels');
+const counterTypes = ['decimal','decimal-leading-zero','arabic-indic','armenian','upper-armenian','lower-armenian','bengali','cambodian','khmer','cjk-decimal','devanagari','georgian','gujarati','gurmukhi','hebrew','kannada','lao','malayalam','mongolian','myanmar','oriya','persian','lower-roman','upper-roman','tamil','telugu','thai','tibetan'];
+const defaultCounterStyleType = 'hebrew';
 
-// css counter elements
+// style tags
+const counterResetStyleTag = document.createElement('style');
+const listStyleTypeTag = document.createElement('style');
 document.body.appendChild(counterResetStyleTag);
 document.body.appendChild(listStyleTypeTag);
+
+// url params
+const startAt = Number(getUrlParam('startAt'));
+const endAt = Number(getUrlParam('endAt'));
+const customCounterStyleType = getUrlParam('counterStyleType');
+
+// states
+let nodes = [];
+let playState = null;
 
 init(CSS_COUNTER, customCounterStyleType || defaultCounterStyleType);
