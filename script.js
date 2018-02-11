@@ -179,16 +179,12 @@ const animate = () => {
 				resolve({playState});
 				return playState;
 			}
-
 			const randVal = Math.random();
 			const randIndex = Math.floor(randVal * checkedNodes.length);
-      
 			const randomEl = checkedNodes[randIndex];
 			randomEl.querySelector('input');
-      
 			randomEl.setAttribute('data-tracked', 'tracked');
 			setTimeout(() => randomEl.removeAttribute('data-tracked'), 1450);
-      
 			animate();
 			resolve();
 		}, 50)
