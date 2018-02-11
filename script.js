@@ -1,7 +1,7 @@
 const CSS_COUNTER = 'my-counter';
+const rootNode = document.querySelector('.labels');
 
 let nodes = [];
-const rootNode = document.querySelector('.labels');
 let counterResetStyleTag = document.createElement('style');
 let listStyleTypeTag = document.createElement('style');
 let defaultCounterStyleType = 'hebrew';
@@ -23,7 +23,7 @@ const hasUrlParams = () => {
 
 const startAt = Number(getUrlParam('startAt'));
 const endAt = Number(getUrlParam('endAt'));
-const counterStyleType = getUrlParam('counterStyleType');
+const customCounterStyleType = getUrlParam('counterStyleType');
 
 // ui dom refs
 const countInput = document.querySelector('#count');
@@ -48,7 +48,6 @@ const counterTypes = ['decimal','decimal-leading-zero','arabic-indic','armenian'
 
 const playAnimation = () => {
   playState = true;
-  // setRandomGridValues();
   animate(CSS_COUNTER);
 }
 const pauseAnimation = () => {
@@ -199,10 +198,9 @@ const animate = () => {
 }
 
 const shuffleGrid = () => {
+  setRandomGridValues();
   return new Promise(resolve => {
     setTimeout(() => {
-      console.log('shuffle')
-      setRandomGridValues();
       shuffleGrid();
       resolve();
     }, Math.random() * 5000);
@@ -210,9 +208,9 @@ const shuffleGrid = () => {
 }
 
 const init = (cssCounterRef, counterStyleType) => {
-  renderTypeSelector(counterStyleType);
   resetCSSCounter(getOffsetValue(), cssCounterRef);
-  setCounterType(counterStyleType);
+  setCounterType(customCounterStyleType);
+  renderTypeSelector(customCounterStyleType);
   
   if (hasUrlParams()) {
     resetValues(endAt, startAt);
