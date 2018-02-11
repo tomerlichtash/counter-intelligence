@@ -1,4 +1,3 @@
-// url params
 const getUrlParam = (name, url) => {
 	if (!url) url = location.href;
 	name = name.replace(/[[]/,'[').replace(/[\]]/,']');
@@ -38,7 +37,6 @@ const pauseAnimation = () => {
 	setPlayState(false);
 };
 
-// list-style-type selector
 const renderTypeSelector = (defaultStyleType) => {
 	return counterTypes.map(type => {
 		const option = document.createElement('option');
