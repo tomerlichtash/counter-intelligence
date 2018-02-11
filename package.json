@@ -1,0 +1,25 @@
+{
+  "name": "counter-poetry",
+  "version": "1.0.0",
+  "description": "If you want to learn more about CSS Counters please read this: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CSS_counters",
+  "main": "script.js",
+  "scripts": {
+    "eslint": "eslint *.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomerlichtash/css-counters-preview.git"
+  },
+  "keywords": [],
+  "author": "Tomer Lichtash <tomer@konzepz.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tomerlichtash/css-counters-preview/issues"
+  },
+  "homepage": "https://github.com/tomerlichtash/css-counters-preview#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^4.17.0"
+  }
+}
