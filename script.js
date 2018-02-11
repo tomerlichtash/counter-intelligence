@@ -100,11 +100,11 @@ const updateStatus = () => {
 };
 
 const getOffsetValue = () => {
-	return Number(offsetInput.value);
+	return Number(UIParts.offsetInput.value);
 };
 
 const getCountValue = () => {
-	return Number(countInput.value);
+	return Number(UIParts.countInput.value);
 };
 
 const resetCSSCounter = (offset, counterName) => {
