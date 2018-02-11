@@ -172,6 +172,10 @@ const animate = () => {
 const shuffleGrid = () => {
 	return new Promise(resolve => {
 		setTimeout(() => {
+      if (!playState) {
+        resolve();
+        return false;
+      }
 			setRandomGridValues();
 			shuffleGrid();
 			resolve();
