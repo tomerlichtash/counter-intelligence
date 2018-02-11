@@ -30,7 +30,7 @@ header {
 }
 header h1 {
   text-align: left;
-  font-size: 2vh;
+  font-size: 1rem;
   padding: 0 1rem;
   letter-spacing: 1px;
   margin: 0;
@@ -51,10 +51,10 @@ header h1, header p {
 }
 
 nav {
+  float: right;
   text-align: center;
   font-size: .8rem;
   line-height: 3rem;
-  float: right;
   margin-right: 1rem;
 }
 nav ul {
@@ -121,7 +121,7 @@ input[type="checkbox"] {
 }
 .labels label span::before {
   display: inline-block;
-  content: counter(my-counter, disc);
+  /* content: counter(my-counter, disc); */
   /* direction: rtl; */
   border-radius: 10rem;
   line-height: 7vmin;
@@ -146,17 +146,21 @@ input:first-child:checked ~ span::before {
   color: green;
   background: lightgreen;
   /* direction: rtl; */
-  box-shadow: 0 0 0 0rem rgba(0,0,0,.0);
+  /* box-shadow: 0 0 0 0rem rgba(0, 0, 0, 0); */
 }
 
-/* .labels label:nth-child(2n+0) span::before { */
-  /* text-indent: -6px; */
-  /* left: 3px; */
-/* } */
-/* .labels label:nth-child(2n+1) span::before { */
-  /* text-indent: 6px; */
-  /* left: -3px; */
-/* } */
+/* .labels label:nth-child(2n+0) span::before {
+  text-indent: -6px;
+  left: 3px;
+}
+.labels label:nth-child(2n+1) span::before {
+  text-indent: 6px;
+  left: -3px;
+} */
+
+.labels label span::before {
+  overflow: hidden;
+}
 .labels label[data-tracked] span::before {
   text-indent: 0;
   left: 0;

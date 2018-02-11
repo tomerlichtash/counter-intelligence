@@ -18,7 +18,7 @@ const getUrlParam = (name, url) => {
 };
 
 const hasUrlParams = () => {
-	return typeof startAt == 'number' && typeof endAt == 'number' && typeof counterStyleType == 'string';
+	return typeof startAt == 'number' && typeof endAt == 'number' && typeof customCounterStyleType == 'string';
 };
 
 const startAt = Number(getUrlParam('startAt'));
@@ -129,8 +129,8 @@ const getCountValue = () => {
 	return Number(countInput.value);
 };
 
-const resetCSSCounter = (limit, counterName) => {
-	counterResetStyleTag.innerHTML = `body{counter-reset: ${counterName} ${limit}}`;
+const resetCSSCounter = (offset, counterName) => {
+	counterResetStyleTag.innerHTML = `body{counter-reset: ${counterName} ${offset}}`;
 };
 
 const resetAll = (cssResetVal) => {
@@ -158,15 +158,15 @@ const setCounterType = (counterType) => {
 	document.querySelector('body').setAttribute('data-list-type', counterType);
 };
 
-const resetValues = (count, offset) => {
+const resetValues = (count, offset, counterType) => {
 	countInput.value = count;
-	offsetInput.value = offset;
+  offsetInput.value = offset;
 };
 
 const render = () => {
 	const nodeCount = getCountValue() - getOffsetValue();
 	if (nodeCount < 0) resetGrid(false);
-	Array(nodeCount).fill().map((n, index) => addNode(createNode(index)));
+	Array(Math.abs(nodeCount)).fill().map((n, index) => addNode(createNode(index)));
 	updateStatus();
 };
 
@@ -179,13 +179,14 @@ const animate = () => {
 				resolve({playState});
 				return playState;
 			}
+      // shuffleGrid();
 			const randVal = Math.random();
 			const randIndex = Math.floor(randVal * checkedNodes.length);
 			const randomEl = checkedNodes[randIndex];
 			randomEl.querySelector('input');
 			randomEl.setAttribute('data-tracked', 'tracked');
 			setTimeout(() => randomEl.removeAttribute('data-tracked'), 1450);
-			animate();
+      animate();
 			resolve();
 		}, 50)
 	);
@@ -202,16 +203,15 @@ const shuffleGrid = () => {
 };
 
 const init = (cssCounterRef, styleType) => {
-	resetCSSCounter(getOffsetValue(), cssCounterRef);
-	setCounterType(styleType);
+  resetCSSCounter(Number(getUrlParam('startAt')) || getOffsetValue(), cssCounterRef);
 	renderTypeSelector(styleType);
-  
-	if (hasUrlParams()) {
-		resetValues(endAt, startAt);
-	}
 
+	if (hasUrlParams()) {
+		resetValues(endAt, startAt, customCounterStyleType);
+  }
+
+  setCounterType(styleType);
 	render();
-	shuffleGrid();
 	playAnimation();
 };
 
