@@ -1,4 +1,4 @@
-body {
+ body {
   padding: 4rem 0 0;
   text-align: center;
   font-family: 'Miriam Libre', sans-serif;
@@ -117,7 +117,6 @@ input[type="checkbox"] {
 .labels label {
   counter-increment: my-counter;
   cursor: pointer;
-  transition: all 250ms ease-in;
   transform: rotate(0deg);
 }
 .labels label span::before {
@@ -140,7 +139,6 @@ input[type="checkbox"] {
 .labels label span::before {
   position: relative;
   opacity: 0;
-  transition: all 425ms ease-in-out;
 }
 
 input:first-child:checked ~ span::before {
@@ -257,7 +255,7 @@ input:first-child:checked ~ span::before {
 
 [data-play-state="play"] .labels label span::before {
   opacity: 0;
-  /* display: none; */
+  transition: all 425ms ease-in-out;
 }
 [data-play-state="pause"] .labels label span::before {
   opacity: .5;
@@ -349,4 +347,15 @@ input:first-child:checked ~ span::before {
 	100% {
 		background-position: 0% 50%
 	}
+}
+
+[data-selected="selected"] span::before {
+  background: purple;
+  color: #fff;
+}
+[data-selected="selected"] input:checked:focus ~ span::before {
+  background: brown;
+}
+[data-selected="selected"] input:checked ~ span::before {
+  background: gold;
 }
