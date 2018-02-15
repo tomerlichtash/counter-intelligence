@@ -1,310 +1,450 @@
- body {
-  padding: 4rem 0 0;
+body {
+  margin: 0;
   text-align: center;
   font-family: 'Miriam Libre', sans-serif;
+  height: 100%;
 }
-
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+}
+u {
+  text-decoration: none;
+}
+p {
+  margin: 0;
+}
+select {
+  border: none;
+  position: relative;
+}
 ul, ol, li {
   margin: 0;
   padding: 0;
 }
 
-a {
-  text-decoration: none;
-}
-a, button, nav label {
-  color: purple;
-}
-
-header {
-  user-select: none;
-  background: rgba(255,255,255,.5);
+.header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
-  direction: ltr;
-  text-align: left;
-  box-shadow: 0 0 .5rem rgba(0,0,0,.25);
+  z-index: 100;
+  background: rgba(128, 0, 128, 1) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAH0lEQVQYV2NkQAX/GZH4/xkYGBhhAmAOSBJEwDkgAQCCrgQEjpMcPgAAAABJRU5ErkJggg==);
+  overflow: hidden;
+  box-shadow: 0 0 1rem rgba(0,0,0,.8);
+  padding: 2rem 0 0;
+  line-height: 2rem;
 }
-header h1 {
-  text-align: left;
-  font-size: 1rem;
-  padding: 0 1rem;
-  letter-spacing: 1px;
-  margin: 0;
-  line-height: 3rem;
-  text-transform: uppercase;
-}
-header p {
-  color: #404040;
-  font-size: .8rem;
-  text-transform: lowercase;
-  margin: 0;
-  padding: 0 1rem;
+.header h1 {
   text-align: center;
-  display: block;
+  text-transform: uppercase;
+  margin: 0;
 }
-header h1, header p {
-  display: inline-block;
+.header h1 a {
+  color: #fff;
+  font-size: 1rem;
+  letter-spacing: .25rem;
+  text-shadow: 0 0 1rem #000;
+  outline: 0;
+  position: relative;
+}
+.header h1 a:focus {
+  color: yellow;
+}
+.header h1 a::before,
+.header h1 a::after {
+  position: relative;
+}
+.header h1 a::before {
+  margin-right: 10px;
+}
+.header h1 a::after {
+  margin-left: 10px;
+}
+.header h1 a:focus::before,
+.header h1 a:focus::after {
+  content: '\2014';
+}
+.header .tagline {
+  display: block;
+  color: #fff;
+  line-height: 2rem;
+  font-size: .9rem;
+  margin: 0;
+  text-align: center;
 }
 
-nav {
-  /* display: none; */
-  float: right;
-  text-align: center;
-  font-size: .8rem;
-  line-height: 3rem;
+.nav {
+  box-shadow: 0 0 13rem rgba(0,0,0,.8);
+  background: purple;
+  max-width: 960px;
+  margin: 2rem auto 0;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+}
+.nav b {
+  font-weight: 900;
+  font-size: .85rem;
+}
+.nav b::after {
+  content: ':';
+}
+.nav .toggles li,
+.nav .inputs li {
+  border: none;
+}
+.nav .wrap {
+  padding: 1rem 0;
+  margin: 0 auto;
+  overflow: hidden;
+  display: flex;
+}
+.nav ul {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-start;
+  margin: 0 1rem;
+}
+.nav ul li {
+  vertical-align: top;
+  align-items: center;
+  list-style: none;
+  cursor: pointer;
+  display: inline-block;
+}
+.nav ul li:not(:last-child) {
   margin-right: 1rem;
 }
-nav ul {
-  display: inline-block;
+.nav .inputs {
+  justify-content: center;
 }
-nav ul li {
-  line-height: 1rem;
-  display: inline-block;
-  margin: 0 0 0 1rem;
-  padding: 0;
-  list-style: none;
-  border-radius: 6px;
-}
-nav b,
-nav button {
-  margin: 0;
+
+.nav input,
+.nav select,
+.nav button,
+.nav label {
+  height: 30px;
+  font-size: 1rem;
   border: none;
   background: none;
-  outline: none;
-  cursor: pointer;
-  font-weight: 900;
   text-transform: uppercase;
+  display: inline-block;
+  color: rgba(255,255,255,.7);
+  outline: 0;
   border-radius: 6px;
+  cursor: pointer;
+  transition: all 125ms ease-in-out;
+  box-shadow: inset 0 0 0 .1rem transparent;
+  font-size: .9rem;
 }
-nav label {
-  font-size: .7rem;
+.nav input:hover,
+.nav select:hover,
+.nav button:hover,
+.nav label:hover {
+  color: rgba(255,255,255,1);
+  background: none;
 }
-nav label b {
-  font-weight: 100;
-  margin: 0 .25rem;
+
+.nav label {
+  padding-left: 1rem;
+  box-shadow: inset 0 0 0 .1rem rgba(0,0,0,.3), inset 0 0 1rem .2rem rgba(0,100,255,.0);
+  background: rgba(0,0,0,.4);
 }
-nav input {
+.nav label:hover {
+  box-shadow: inset 0 0 0 .1rem #fff;
+}
+
+.nav button {
+  background: rgba(0,0,0,.3);
+  padding: 0 1rem;
+  font-weight: 900;
+  border: none;
+  font-size: .8rem;
+}
+.nav button:hover {
+  box-shadow: inset 0 0 0 .1rem #fff;
+  background: none;
+}
+.nav button:active {
+  background: white;
+  color: purple;
+  box-shadow: none;
+}
+.nav select {
+  color: #fff;
+  font-family: 'Miriam Libre', sans-serif;
+  font-weight: 500;
+  max-width: 200px;
+}
+.nav input {
+  max-width: 75px;
   text-align: center;
   border: none;
   position: relative;
-  width: 100px;
   font-family: 'Miriam Libre', sans-serif;
-  direction: ltr;
-  background: rgba(0,0,0,.5);
-  border-radius: 4px;
+  background: none;
   color: #fff;
-  font-weight: 900;
+  margin-left: 1rem;
 }
-nav input:focus {
+.nav input:focus {
+  cursor: text;
+}
+.nav input:focus {
+  box-shadow: inset 0 0 0 .1rem #fff, inset 0 0 0 .2rem purple;
+  background: #fff;
+  color: purple;
   outline: 0;
-  background: purple;
-  color: #fff;
+}
+.nav input:focus {
+  color: purple;
 }
 
-button:hover, button:focus {
-  background: purple;
-  color: #fff;
+.toggle-play {
+  position: relative;
+}
+.toggle-play input {
+  opacity: 0;
+  position: absolute;
+}
+.toggle-play input ~ .caption {
+  transition: all 175ms ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+[data-play-state="pause"] .nav .btn#togglePlay .caption:first-child {
+  opacity: 1;
+}
+[data-play-state="play"] .nav .btn#togglePlay .caption:first-child {
+  opacity: 0;
+  position: absolute;
+}
+[data-play-state="pause"] .nav .btn#togglePlay .caption:last-child {
+  opacity: 0;
+  position: absolute;
+}
+[data-play-state="play"] .nav .btn#togglePlay .caption:last-child {
+  opacity: 1;
 }
 
-.labels input[type="checkbox"] {
+.document {
+  background: #fff;
+  box-shadow: 0 0 1rem rgba(0,0,0,.4);
+  border-radius: 6px;
+  margin: 0 auto 2rem;
+  line-height: 1.5rem;
+}
+.document ul li {
+  list-style: inside;
+}
+.document .items.full-width .item {
+  width: 100%;
+  display: block;
+  padding: 4rem 6rem 0;
+  text-align: center;
+}
+.document .items.full-width .item p {
+  font-size: 1.5rem;
+  line-height: 3rem;
+  letter-spacing: -.05rem;
+  color: rgba(0, 0, 0, .6);
+}
+
+.document a {
+  color: #404040;
+  border-bottom: .1rem solid rgba(0,0,0,0.2);
+}
+.document a:hover {
+  border-bottom: .1rem solid purple;
+  color: purple;
+}
+
+.document p {
+  font-size: .9rem;
+}
+.document .items {
+  padding: 2rem;
+}
+.document .item {
+  display: inline-block;
+  width: 50%;
+}
+
+.info h2 {
+  text-transform: uppercase;
+  text-align: left;
+  color: rgba(0, 0, 0, .5);
+  border-top: .2rem solid rgba(0, 0, 0, .2);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  letter-spacing: .1rem;
+  padding-top: 1rem;
+  margin-right: 2rem;
+}
+
+.info {
+  max-width: 960px;
+  margin: 0 auto;
+  background: #fff;
+}
+.info .items {
+  max-width: 960px;
+  display: flex;
+  flex-direction: row;
+}
+.info .items .item {
+  justify-content: space-around;
+  text-align: left;
+  order: 1;
+}
+.info .item {
+  font-size: .9rem;
+}
+.info .item p {
+  padding-right: 3rem;
+}
+
+.api-glossary {
+  margin-top: 1rem;
+}
+.info ul li {
+  list-style: inside;
+  list-style-type: circle;
+}
+.info code {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.stage {
+  padding-bottom: 2rem;
+}
+.stage .wrap {
+  margin: 0 auto;
+  max-width: 960px;
+  background: #fff;
+  box-shadow: 0 0 1rem rgba(0,0,0,.4);
+  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+.stage > .wrap > .items {
+  z-index: 0;
+  background: #fff;
+  padding: 2rem;
+  margin: 12rem auto 2rem;
+  overflow-x: scroll;
+  text-align: right;
+  text-align: center;
+  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.items input[type="checkbox"] {
   display: none;
 }
-
-.labels label {
+.stage > .wrap > .items .item {
+  overflow: hidden;
   counter-increment: my-counter;
   cursor: pointer;
-  transform: rotate(0deg);
-}
-.labels label span::before {
+  vertical-align: top;
   display: inline-block;
-  vertical-align: middle;
-  /* box-shadow: inset 0 -1rem 1rem .1rem rgba(0,0,0,.25); */
-  /* content: counter(my-counter, disc); */
-  /* direction: rtl; */
+  text-align: center;
+}
+.item .content {
+  position: relative;
+}
+.item:hover .content::before {
+  background: greenyellow;
+}
+.item:hover input:checked ~ .content::before {
+  background: green;
+  color: white;
+}
+.items .item .content::before {
+  user-select: text;
+  display: inline-block;
   border-radius: 10rem;
-  line-height: 7vmin;
-  width: 7vmin;
-  height: 7vmin;
+  line-height: 6rem;
+  width: 6rem;
+  height: 6rem;
+  font-size: 1.2rem;
   font-weight: 100;
-  font-size: 2vmin;
-  /* padding: 1rem; */
-  border: 1rem solid #fff;
+  text-align: center;
   font-family: "Bellefair", serif;
 }
-.labels label span:hover::before {
-  background: blue;
-  color: #fff;
-}
-.labels label span::before {
-  position: relative;
-  opacity: 0;
-}
 
-input:first-child:checked ~ span::before {
+input:first-child:checked ~ .content::before {
   color: green;
   background: lightgreen;
 }
 
-.labels label:nth-child(2n+0) span::before {
-
-  /* border: 5px solid red; */
-}
-
-/* .labels label:nth-child(2n+0) span::before {
-  text-indent: -6px;
-  left: 3px;
-}
-.labels label:nth-child(2n+1) span::before {
-  text-indent: 6px;
-  left: -3px;
-} */
-
-.labels label span::before {
-  overflow: hidden;
-}
-.labels label[data-tracked] span::before {
-  text-indent: 0;
-  left: 0;
-}
-
-[data-list-type="decimal"] label span::before {
-  content: counter(my-counter, decimal);
-}
-[data-list-type="decimal-leading-zero"] label span::before {
-  content: counter(my-counter, decimal-leading-zero);
-}
-[data-list-type="arabic-indic"] label span::before {
-  content: counter(my-counter, arabic-indic);
-}
-[data-list-type="armenian"] label span::before {
-  content: counter(my-counter, armenian);
-}
-[data-list-type="upper-armenian"] label span::before {
-  content: counter(my-counter, upper-armenian);
-}
-[data-list-type="lower-armenian"] label span::before {
-  content: counter(my-counter, lower-armenian);
-}
-[data-list-type="bengali"] label span::before {
-  content: counter(my-counter, bengali);
-}
-[data-list-type="cambodian"] label span::before {
-  content: counter(my-counter, cambodian);
-}
-[data-list-type="khmer"] label span::before {
-  content: counter(my-counter, khmer);
-}
-[data-list-type="cjk-decimal"] label span::before {
-  content: counter(my-counter, cjk-decimal);
-}
-[data-list-type="devanagari"] label span::before {
-  content: counter(my-counter, devanagari);
-}
-[data-list-type="georgian"] label span::before {
-  content: counter(my-counter, georgian);
-}
-[data-list-type="gujarati"] label span::before {
-  content: counter(my-counter, gujarati);
-}
-[data-list-type="gurmukhi"] label span::before {
-  content: counter(my-counter, gurmukhi);
-}
-[data-list-type="hebrew"] label span::before {
-  content: counter(my-counter, hebrew);
-}
-[data-list-type="kannada"] label span::before {
-  content: counter(my-counter, kannada);
-}
-[data-list-type="lao"] label span::before {
-  content: counter(my-counter, lao);
-}
-[data-list-type="malayalam"] label span::before {
-  content: counter(my-counter, malayalam);
-}
-[data-list-type="mongolian"] label span::before {
-  content: counter(my-counter, mongolian);
-}
-[data-list-type="myanmar"] label span::before {
-  content: counter(my-counter, myanmar);
-}
-[data-list-type="oriya"] label span::before {
-  content: counter(my-counter, oriya);
-}
-[data-list-type="persian"] label span::before {
-  content: counter(my-counter, persian);
-}
-[data-list-type="lower-roman"] label span::before {
-  content: counter(my-counter, lower-roman);
-}
-[data-list-type="upper-roman"] label span::before {
-  content: counter(my-counter, upper-roman);
-}
-[data-list-type="tamil"] label span::before {
-  content: counter(my-counter, tamil);
-}
-[data-list-type="telugu"] label span::before {
-  content: counter(my-counter, telugu);
-}
-[data-list-type="thai"] label span::before {
-  content: counter(my-counter, thai);
-}
-[data-list-type="tibetan"] label span::before {
-  content: counter(my-counter, tibetan);
-}
-
-[data-tracked="tracked"] input:first-child:checked ~ span::before {
-  opacity: 1;
-  display: inline-block;
-}
-
-[data-play-state="play"] .labels label span::before {
-  opacity: 0;
-  transition: all 425ms ease-in-out;
-}
-[data-play-state="pause"] .labels label span::before {
-  opacity: .5;
-}
-
-.status {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-}
+[data-list-type="decimal"] .content::before {content: counter(my-counter, decimal)}
+[data-list-type="decimal-leading-zero"] .content::before {content: counter(my-counter, decimal-leading-zero)}
+[data-list-type="arabic-indic"] .content::before {content: counter(my-counter, arabic-indic)}
+[data-list-type="armenian"] .content::before {content: counter(my-counter, armenian)}
+[data-list-type="upper-armenian"] .content::before {content: counter(my-counter, upper-armenian)}
+[data-list-type="lower-armenian"] .content::before {content: counter(my-counter, lower-armenian)}
+[data-list-type="bengali"] .content::before {content: counter(my-counter, bengali)}
+[data-list-type="cambodian"] .content::before {content: counter(my-counter, cambodian)}
+[data-list-type="khmer"] .content::before {content: counter(my-counter, khmer)}
+[data-list-type="cjk-decimal"] .content::before {content: counter(my-counter, cjk-decimal)}
+[data-list-type="devanagari"] .content::before {content: counter(my-counter, devanagari)}
+[data-list-type="georgian"] .content::before {content: counter(my-counter, georgian)}
+[data-list-type="gujarati"] .content::before {content: counter(my-counter, gujarati)}
+[data-list-type="gurmukhi"] .content::before {content: counter(my-counter, gurmukhi)}
+[data-list-type="hebrew"] .content::before {content: counter(my-counter, hebrew)}
+[data-list-type="kannada"] .content::before {content: counter(my-counter, kannada)}
+[data-list-type="lao"] .content::before {content: counter(my-counter, lao)}
+[data-list-type="malayalam"] .content::before {content: counter(my-counter, malayalam)}
+[data-list-type="mongolian"] .content::before {content: counter(my-counter, mongolian)}
+[data-list-type="myanmar"] .content::before {content: counter(my-counter, myanmar)}
+[data-list-type="oriya"] .content::before {content: counter(my-counter, oriya)}
+[data-list-type="persian"] .content::before {content: counter(my-counter, persian)}
+[data-list-type="lower-roman"] .content::before {content: counter(my-counter, lower-roman)}
+[data-list-type="upper-roman"] .content::before {content: counter(my-counter, upper-roman)}
+[data-list-type="tamil"] .content::before {content: counter(my-counter, tamil)}
+[data-list-type="telugu"] .content::before {content: counter(my-counter, telugu)}
+[data-list-type="thai"] .content::before {content: counter(my-counter, thai)}
+[data-list-type="tibetan"] .content::before {content: counter(my-counter, tibetan)}
 
 /* source: https://codepen.io/beben-koben/pen/BoLyf */
 #forkMe {
-    bottom: 3em;
-    left: -6em;
-    color: #fff;
-    display: block;
-    position: fixed;
-    text-align: center;
-    text-decoration: none;
-    letter-spacing: .06rem;
-    background-color: magenta;
-    padding: 0.5em 5em 0.4em 5em;
-    transform: rotate(45deg) scale(0.75,1);
-    font-size: .8rem;
-    font-weight: 900;
-    -webkit-transform: rotate(45deg) scale(0.75,1);
-    z-index: 10;
-    text-transform: lowercase;
+  bottom: 3em;
+  left: -6em;
+  color: #fff;
+  display: block;
+  position: fixed;
+  text-align: center;
+  text-decoration: none;
+  background-color: magenta;
+  padding: 0.5em 5em 0.4em 5em;
+  transform: rotate(45deg) scale(0.75,1);
+  font-size: .8rem;
+  font-weight: 900;
+  -webkit-transform: rotate(45deg) scale(0.75,1);
+  z-index: 10;
+  text-transform: lowercase;
+  background: linear-gradient(-45deg, #444, #666, #888, #CCC);
+  background-size: 400% 400%;
+  -webkit-animation: Gradient 15s ease infinite;
+  -moz-animation: Gradient 15s ease infinite;
+  animation: Gradient 15s ease infinite;
 }
 #forkMe:before {
-    content: '';
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-    margin: -0.3em -5em;
-    transform: scale(0.7);
-    -webkit-transform: scale(0.7);
-    border: 2px rgba(255,255,255,0.7) dashed;
+  content: '';
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  margin: -0.3em -5em;
+  transform: scale(0.7);
+  -webkit-transform: scale(0.7);
+  border: 2px rgba(255,255,255,0.7) dashed;
 }
 #forkMe:hover {
 	background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
@@ -315,55 +455,18 @@ input:first-child:checked ~ span::before {
 }
 
 /* source: https://codepen.io/P1N2O/pen/pyBNzX */
-#forkMe {
-	background: linear-gradient(-45deg, #444, #666, #888, #CCC);
-	/* background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB); */
-	background-size: 400% 400%;
-	-webkit-animation: Gradient 15s ease infinite;
-	-moz-animation: Gradient 15s ease infinite;
-	animation: Gradient 15s ease infinite;
-}
 @-webkit-keyframes Gradient {
-	0% {
-		background-position: 0% 50%
-	}
-	50% {
-		background-position: 100% 50%
-	}
-	100% {
-		background-position: 0% 50%
-	}
+	0% {background-position: 0% 50%}
+	50% {background-position: 100% 50%}
+	100% {background-position: 0% 50%}
 }
 @-moz-keyframes Gradient {
-	0% {
-		background-position: 0% 50%
-	}
-	50% {
-		background-position: 100% 50%
-	}
-	100% {
-		background-position: 0% 50%
-	}
+	0% {background-position: 0% 50%}
+	50% {background-position: 100% 50%}
+	100% {background-position: 0% 50%}
 }
 @keyframes Gradient {
-	0% {
-		background-position: 0% 50%
-	}
-	50% {
-		background-position: 100% 50%
-	}
-	100% {
-		background-position: 0% 50%
-	}
-}
-
-[data-selected="selected"] span::before {
-  background: purple;
-  color: #fff;
-}
-[data-selected="selected"] input:checked:focus ~ span::before {
-  background: brown;
-}
-[data-selected="selected"] input:checked ~ span::before {
-  background: gold;
+	0% {background-position: 0% 50%}
+	50% {background-position: 100% 50%}
+	100% {background-position: 0% 50%}
 }
