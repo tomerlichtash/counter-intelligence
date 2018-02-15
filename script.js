@@ -15,19 +15,20 @@ const UIParts = {
 	languageInput: document.querySelector('#language')
 };
 
-document.body.appendChild(UIParts.COUNTER_RESET_NODE);
-document.body.appendChild(UIParts.COUNTER_TYPE_NODE);
+const getInputValue = name => Number(UIParts[name].value);
+
+const onOffsetChange = cssCounterRef => resetAll(getInputValue(OFFSET_INPUT_ID), cssCounterRef);
+const onCountChange = cssCounterRef => resetAll(getInputValue(RANGE_INPUT_ID), cssCounterRef);
 
 const random = (min, max) => Math.floor((Math.random() * (max - min + 1)) + min);
-
 const getRandomLang = () => COUNTER_TYPES[random(0, COUNTER_TYPES.length - 1)];
+const getRandomValue = (offset, range) => random(-40, 40);
 
-const getRandomValue = (offset, range) => {
-	const max = range || random(50, 100);
-	const min = offset || random(0, max);
-	return random(min, max);
+const getNodes = () => Array.prototype.slice.call(NODES);
+const addNode = (node) => {
+	NODES.push(node);
+	UIParts.ROOT_NODE.appendChild(node);
 };
-
 const createNode = () => {
 	const el = document.createElement('label');
 	const input = document.createElement('input');
@@ -41,26 +42,16 @@ const createNode = () => {
 	return el;
 };
 
-const addNode = (node) => {
-	NODES.push(node);
-	UIParts.ROOT_NODE.appendChild(node);
-};
-
 const getUrlParam = (name, url) => {
-	if (!url) {
-		url = location.href;
-	}
+	if (!url) url = location.href;
 	name = name.replace(/[[]/,'[').replace(/[\]]/,']');
 	const s = '[\\?&]' + name + '=([^&#]*)';
 	const rgx = new RegExp(s);
 	const res = rgx.exec(url);
 	return res == null ? null : res[1];
 };
-
 const getParamVal = param => Number(param) || getRandomValue();
-
 const getLangVal = param => param || getRandomLang();
-
 const getParams = (offsetVal, rangeVal) => {
 	const offset = getParamVal(offsetVal);
 	const range = getParamVal(rangeVal);
@@ -73,16 +64,8 @@ const getParams = (offsetVal, rangeVal) => {
 	return {offset, range, language};
 };
 
-// getters
-const getNodes = () => Array.prototype.slice.call(NODES);
-
-const getInputValue = name => Number(UIParts[name].value);
-
-// resets
 const resetCSSCounter = (offset, counterName) => UIParts.COUNTER_RESET_NODE.innerHTML = `body{counter-reset: ${counterName} ${offset}}`;
-
 const setCounterLanguage = language => document.querySelector('body').setAttribute('data-list-type', language);
-
 const resetAll = (cssResetVal, cssCounterRef) => {
 	getNodes().map(node => UIParts.ROOT_NODE.removeChild(node));
 	resetCSSCounter(cssResetVal, cssCounterRef);
@@ -90,20 +73,20 @@ const resetAll = (cssResetVal, cssCounterRef) => {
 	render();
 };
 
-const renderTypeSelector = language => COUNTER_TYPES.map(type => {
-	const option = document.createElement('option');
-	option.value = type;
-	option.innerHTML = type.toUpperCase();
-	option.selected = type === language;
-	UIParts[LANGUAGE_INPUT_ID].appendChild(option);
-});
-
 const render = () => {
 	const nodeCount = getInputValue(RANGE_INPUT_ID) - getInputValue(OFFSET_INPUT_ID);
 	Array(nodeCount).fill().map((n, index) => addNode(createNode(index)));
 };
 
-const init = (cssCounterRef) => {
+const init = (cssCounterRef, counterTypes) => {
+	const renderTypeSelector = language => counterTypes.map(type => {
+		const option = document.createElement('option');
+		option.value = type;
+		option.innerHTML = type.toUpperCase();
+		option.selected = type === language;
+		UIParts[LANGUAGE_INPUT_ID].appendChild(option);
+	});
+
 	const offset = getUrlParam('offset');
 	const range = getUrlParam('range');
 	const params = getParams(offset, range);
@@ -118,7 +101,7 @@ const init = (cssCounterRef) => {
 	render();
 };
 
-const onOffsetChange = cssCounterRef => resetAll(getInputValue(OFFSET_INPUT_ID), cssCounterRef);
-const onCountChange = cssCounterRef => resetAll(getInputValue(RANGE_INPUT_ID), cssCounterRef);
+document.body.appendChild(UIParts.COUNTER_RESET_NODE);
+document.body.appendChild(UIParts.COUNTER_TYPE_NODE);
 
-init(CSS_COUNTER);
+init(CSS_COUNTER, COUNTER_TYPES);
