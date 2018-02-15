@@ -201,36 +201,20 @@ ul, ol, li {
   color: purple;
 }
 
-.toggle-play {
-  position: relative;
+.footer {
+  padding: 0 0 2rem 0;
+  font-size: .8rem;
 }
-.toggle-play input {
-  opacity: 0;
-  position: absolute;
+.footer a,
+.document a {
+  color: #404040;
+  border-bottom: .1rem solid rgba(0,0,0,0.2);
 }
-.toggle-play input ~ .caption {
-  transition: all 175ms ease-in-out;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
+.footer a:hover,
+.document a:hover {
+  border-bottom: .1rem solid purple;
+  color: purple;
 }
-[data-play-state="pause"] .nav .btn#togglePlay .caption:first-child {
-  opacity: 1;
-}
-[data-play-state="play"] .nav .btn#togglePlay .caption:first-child {
-  opacity: 0;
-  position: absolute;
-}
-[data-play-state="pause"] .nav .btn#togglePlay .caption:last-child {
-  opacity: 0;
-  position: absolute;
-}
-[data-play-state="play"] .nav .btn#togglePlay .caption:last-child {
-  opacity: 1;
-}
-
 .document {
   background: #fff;
   box-shadow: 0 0 1rem rgba(0,0,0,.4);
@@ -253,16 +237,6 @@ ul, ol, li {
   letter-spacing: -.05rem;
   color: rgba(0, 0, 0, .6);
 }
-
-.document a {
-  color: #404040;
-  border-bottom: .1rem solid rgba(0,0,0,0.2);
-}
-.document a:hover {
-  border-bottom: .1rem solid purple;
-  color: purple;
-}
-
 .document p {
   font-size: .9rem;
 }
