@@ -6,7 +6,7 @@ const OFFSET_INPUT_ID =  'offsetInput';
 const RANGE_INPUT_ID =  'rangeInput';
 const LANGUAGE_INPUT_ID =  'languageInput';
 
-const UIParts = {
+const UI = {
 	COUNTER_RESET_NODE: document.createElement('style'),
 	COUNTER_TYPE_NODE: document.createElement('style'),
 	ROOT_NODE: document.querySelector('.items'),
@@ -15,19 +15,16 @@ const UIParts = {
 	languageInput: document.querySelector('#language')
 };
 
-const getInputValue = name => Number(UIParts[name].value);
-
+const getInputValue = name => Number(UI[name].value);
 const onOffsetChange = cssCounterRef => resetAll(getInputValue(OFFSET_INPUT_ID), cssCounterRef);
 const onCountChange = cssCounterRef => resetAll(getInputValue(RANGE_INPUT_ID), cssCounterRef);
-
 const random = (min, max) => Math.floor((Math.random() * (max - min + 1)) + min);
 const getRandomLang = () => COUNTER_TYPES[random(0, COUNTER_TYPES.length - 1)];
 const getRandomValue = (offset, range) => random(-40, 40);
-
 const getNodes = () => Array.prototype.slice.call(NODES);
 const addNode = (node) => {
 	NODES.push(node);
-	UIParts.ROOT_NODE.appendChild(node);
+	UI.ROOT_NODE.appendChild(node);
 };
 const createNode = () => {
 	const el = document.createElement('label');
@@ -50,11 +47,10 @@ const getUrlParam = (name, url) => {
 	const res = rgx.exec(url);
 	return res == null ? null : res[1];
 };
-const getParamVal = param => Number(param) || getRandomValue();
 const getLangVal = param => param || getRandomLang();
 const getParams = (offsetVal, rangeVal) => {
-	const offset = getParamVal(offsetVal);
-	const range = getParamVal(rangeVal);
+	const offset = Number(offsetVal) || getRandomValue();
+	const range = Number(rangeVal) || getRandomValue();
 	if (range <= 0) {
 		return getParams();
 	} else if (offset >= range) {
@@ -64,44 +60,41 @@ const getParams = (offsetVal, rangeVal) => {
 	return {offset, range, language};
 };
 
-const resetCSSCounter = (offset, counterName) => UIParts.COUNTER_RESET_NODE.innerHTML = `body{counter-reset: ${counterName} ${offset}}`;
+const resetCSSCounter = (offset, counterName) => UI.COUNTER_RESET_NODE.innerHTML = `body{counter-reset: ${counterName} ${offset}}`;
 const setCounterLanguage = language => document.querySelector('body').setAttribute('data-list-type', language);
 const resetAll = (cssResetVal, cssCounterRef) => {
-	getNodes().map(node => UIParts.ROOT_NODE.removeChild(node));
+	getNodes().map(node => UI.ROOT_NODE.removeChild(node));
 	resetCSSCounter(cssResetVal, cssCounterRef);
 	NODES = [];
 	render();
 };
 
-const render = () => {
-	const nodeCount = getInputValue(RANGE_INPUT_ID) - getInputValue(OFFSET_INPUT_ID);
-	Array(nodeCount).fill().map((n, index) => addNode(createNode(index)));
-};
+const render = () => Array(getInputValue(RANGE_INPUT_ID) - getInputValue(OFFSET_INPUT_ID)).fill().map((n, index) => addNode(createNode(index)));
+const renderTypeSelector = language => COUNTER_TYPES.map(type => UI[LANGUAGE_INPUT_ID].appendChild(getOptionDef(type, language)));
+const getOptionDef = (value, language) => Object.assign(document.createElement('option'), {
+	value,
+	innerHTML: value.toUpperCase(),
+	selected: value === language
+});
 
 const init = (cssCounterRef, counterTypes) => {
-	const renderTypeSelector = language => counterTypes.map(type => {
-		const option = document.createElement('option');
-		option.value = type;
-		option.innerHTML = type.toUpperCase();
-		option.selected = type === language;
-		UIParts[LANGUAGE_INPUT_ID].appendChild(option);
-	});
-
 	const offset = getUrlParam('offset');
 	const range = getUrlParam('range');
 	const params = getParams(offset, range);
-	UIParts[OFFSET_INPUT_ID].value = params.offset;
-	UIParts[RANGE_INPUT_ID].value = params.range;
-	UIParts[RANGE_INPUT_ID].addEventListener('change', () => onCountChange(cssCounterRef));
-	UIParts[OFFSET_INPUT_ID].addEventListener('change', () => onOffsetChange(cssCounterRef));
-	UIParts[LANGUAGE_INPUT_ID].addEventListener('change', evt => setCounterLanguage(evt.target.value));
+
+	UI[RANGE_INPUT_ID].addEventListener('change', () => onCountChange(cssCounterRef));
+	UI[OFFSET_INPUT_ID].addEventListener('change', () => onOffsetChange(cssCounterRef));
+	UI[LANGUAGE_INPUT_ID].addEventListener('change', evt => setCounterLanguage(evt.target.value));
+	UI[OFFSET_INPUT_ID].value = params.offset;
+	UI[RANGE_INPUT_ID].value = params.range;
+
 	resetCSSCounter(params.offset, cssCounterRef);
 	setCounterLanguage(params.language);
 	renderTypeSelector(params.language);
 	render();
 };
 
-document.body.appendChild(UIParts.COUNTER_RESET_NODE);
-document.body.appendChild(UIParts.COUNTER_TYPE_NODE);
+document.body.appendChild(UI.COUNTER_RESET_NODE);
+document.body.appendChild(UI.COUNTER_TYPE_NODE);
 
 init(CSS_COUNTER, COUNTER_TYPES);
