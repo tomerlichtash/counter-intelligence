@@ -18,9 +18,11 @@ const UI = {
 const getInputValue = name => Number(UI[name].value);
 const onOffsetChange = cssCounterRef => resetAll(getInputValue(OFFSET_INPUT_ID), cssCounterRef);
 const onCountChange = cssCounterRef => resetAll(getInputValue(RANGE_INPUT_ID), cssCounterRef);
+
 const random = (min, max) => Math.floor((Math.random() * (max - min + 1)) + min);
 const getRandomLang = () => COUNTER_TYPES[random(0, COUNTER_TYPES.length - 1)];
 const getRandomValue = (offset, range) => random(-40, 40);
+
 const getNodes = () => Array.prototype.slice.call(NODES);
 const addNode = (node) => {
 	NODES.push(node);
@@ -85,6 +87,7 @@ const init = (cssCounterRef, counterTypes) => {
 	UI[RANGE_INPUT_ID].addEventListener('change', () => onCountChange(cssCounterRef));
 	UI[OFFSET_INPUT_ID].addEventListener('change', () => onOffsetChange(cssCounterRef));
 	UI[LANGUAGE_INPUT_ID].addEventListener('change', evt => setCounterLanguage(evt.target.value));
+
 	UI[OFFSET_INPUT_ID].value = params.offset;
 	UI[RANGE_INPUT_ID].value = params.range;
 
