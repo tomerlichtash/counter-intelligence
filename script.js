@@ -1,21 +1,41 @@
-const CSS_COUNTER_RESET_ELEMENT = document.createElement('style');
-const CSS_COUNTER_TYPE_ELEMENT = document.createElement('style');
-document.body.appendChild(CSS_COUNTER_RESET_ELEMENT);
-document.body.appendChild(CSS_COUNTER_TYPE_ELEMENT);
-
-// states
 let nodes = [];
 
-// consts
 const ROOT_NODE = document.querySelector('.items');
 const CSS_COUNTER = 'my-counter';
-// const DEFAULT_COUNTER_TYPE = 'hebrew';
 const COUNTER_TYPES = ['decimal','decimal-leading-zero','arabic-indic','armenian','upper-armenian','lower-armenian','bengali','cambodian','khmer','devanagari','georgian','gujarati','gurmukhi','hebrew','kannada','lao','malayalam','mongolian','myanmar','oriya','persian','lower-roman','upper-roman','telugu','thai','tibetan'];
+
+const CSS_COUNTER_RESET_ELEMENT = document.createElement('style');
+const CSS_COUNTER_TYPE_ELEMENT = document.createElement('style');
+
+document.body.appendChild(CSS_COUNTER_RESET_ELEMENT);
+document.body.appendChild(CSS_COUNTER_TYPE_ELEMENT);
 
 const UIParts = {
 	rangeInput: document.querySelector('#count'),
 	offsetInput: document.querySelector('#offset'),
 	languageInput: document.querySelector('#language')
+};
+
+// render
+const renderTypeSelector = (language) => {
+	return COUNTER_TYPES.map(type => {
+		const option = document.createElement('option');
+		option.value = type;
+		option.innerHTML = type.toUpperCase();
+		option.selected = type === language;
+		UIParts.languageInput.appendChild(option);
+	});
+};
+const rand = (f) => Math.floor(Math.random() * (f || 100));
+
+const randomize = (offset, range) => {
+  const min = offset || rand();
+  const max = range || rand();
+  return rand(max - min + 1);
+};
+
+const randomizeLang = () => {
+  return COUNTER_TYPES[Math.floor(Math.random(COUNTER_TYPES.length) * COUNTER_TYPES.length)];
 };
 
 const createNode = () => {
@@ -36,6 +56,7 @@ const addNode = (node) => {
 };
 
 const getUrlParam = (name, url) => {
+  console.log('get url param');
 	if (!url) {
     url = location.href;
   }
@@ -48,18 +69,18 @@ const getUrlParam = (name, url) => {
 const getParamVal = (param) => {
   if (!param) {
     return randomize();
+  } else if (typeof param === 'string' && param === 'rand') {
+    return randomize();
   }
   return Number(param);
 };
+const getParams = (offsetVal, rangeVal) => {
+  const offset = getParamVal(offsetVal);
+  const range = getParamVal(rangeVal);
 
-const getParams = (o, r) => {
-  const offsetParam = o || getUrlParam('offset');
-  const rangeParam = r || getUrlParam('range');
-
-  const offset = getParamVal(offsetParam);
-  const range = getParamVal(rangeParam);
-
-  if (offset - range === 0) {
+  if (range <= 0) {
+    return getParams();
+  } else if (range - offset === 0) {
     return getParams();
   } else if (offset >= range) {
     return getParams(range, offset);
@@ -69,16 +90,6 @@ const getParams = (o, r) => {
   const language = langParam ? langParam : randomizeLang();
   
   return {offset, range, language};
-};
-
-const randomize = (offset, range) => {
-  const min = Math.ceil(offset) || Math.floor(Math.random() * 100);
-  const max = Math.floor(range) || Math.floor(Math.random() * 100);
-  return Math.floor(Math.random() * (max - min + 1)) + 1;
-};
-
-const randomizeLang = () => {
-  return COUNTER_TYPES[Math.floor(Math.random(COUNTER_TYPES.length) * COUNTER_TYPES.length)];
 };
 
 const bindUI = (UI, cssCounterRef, params) => {
@@ -103,15 +114,12 @@ const resetAll = (cssResetVal, cssCounterRef) => {
   return false;
 };
 const resetGrid = (isChecked) => {
-	getInputs().map((input) => input.checked = isChecked || false);
+	getNodes().map(node => node.querySelector('input').checked = isChecked || false);
 };
 
 // getters
 const getNodes = () => {
 	return Array.prototype.slice.call(nodes);
-};
-const getInputs = () => {
-	return getNodes().map(label => label.querySelector('input[type="checkbox"]'));
 };
 const getOffsetValue = () => {
 	return Number(UIParts.offsetInput.value);
@@ -151,15 +159,14 @@ const render = () => {
 };
 
 const init = (cssCounterRef) => {
-  const params = getParams();
-	return new Promise(resolve => {
-		bindUI(UIParts, cssCounterRef, params);
-    resetCSSCounter(params.offset, cssCounterRef);
-		setCounterLanguage(params.language);
-    renderTypeSelector(params.language);
-		render();
-		resolve();
-	});
+  const offset = getUrlParam('offset');
+  const range = getUrlParam('range');
+  const params = getParams(offset, range);
+  bindUI(UIParts, cssCounterRef, params);
+  resetCSSCounter(params.offset, cssCounterRef);
+  setCounterLanguage(params.language);
+  renderTypeSelector(params.language);
+  render();
 };
 
 init(CSS_COUNTER);
