@@ -7,10 +7,7 @@ body {
 *, *:before, *:after {
   box-sizing: border-box;
 }
-a {
-  text-decoration: none;
-}
-u {
+a, u {
   text-decoration: none;
 }
 p {
@@ -123,7 +120,6 @@ ul, ol, li {
 
 .nav input,
 .nav select,
-.nav button,
 .nav label {
   height: 30px;
   font-size: 1rem;
@@ -141,7 +137,6 @@ ul, ol, li {
 }
 .nav input:hover,
 .nav select:hover,
-.nav button:hover,
 .nav label:hover {
   color: rgba(255,255,255,1);
   background: none;
@@ -150,47 +145,40 @@ ul, ol, li {
 .nav label {
   padding-left: 1rem;
   box-shadow: inset 0 0 0 .1rem rgba(0,0,0,.3), inset 0 0 1rem .2rem rgba(0,100,255,.0);
-  background: rgba(0,0,0,.4);
+  user-select: none;
+  /* background: rgba(0,0,0,.4); */
 }
 .nav label:hover {
   box-shadow: inset 0 0 0 .1rem #fff;
 }
 
-.nav button {
-  background: rgba(0,0,0,.3);
-  padding: 0 1rem;
-  font-weight: 900;
-  border: none;
-  font-size: .8rem;
-}
-.nav button:hover {
-  box-shadow: inset 0 0 0 .1rem #fff;
-  background: none;
-}
-.nav button:active {
-  background: white;
-  color: purple;
-  box-shadow: none;
-}
 .nav select {
   color: #fff;
+  box-shadow: inset 0 0 0 .1rem rgba(0,0,0,.3), inset 0 0 1rem .2rem rgba(0,100,255,.0);
   font-family: 'Miriam Libre', sans-serif;
-  font-weight: 500;
-  max-width: 200px;
+  vertical-align: top;
+  font-size: .8rem;
+  /* background: #fff; */
+  font-weight: 900;
+  color: white;
+}
+.nav .option::before {
+  content: 'language';
 }
 .nav input {
-  max-width: 75px;
+  max-width: 6rem;
   text-align: center;
-  border: none;
-  position: relative;
   font-family: 'Miriam Libre', sans-serif;
   background: none;
   color: #fff;
-  margin-left: 1rem;
+  margin-left: .5rem;
+  height: 30px;
+  vertical-align: top;
 }
 .nav input:focus {
   cursor: text;
 }
+.nav select:focus,
 .nav input:focus {
   box-shadow: inset 0 0 0 .1rem #fff, inset 0 0 0 .2rem purple;
   background: #fff;
