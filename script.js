@@ -16,16 +16,6 @@ const UIParts = {
 	languageInput: document.querySelector('#language')
 };
 
-// render
-const renderTypeSelector = (language) => {
-	return COUNTER_TYPES.map(type => {
-		const option = document.createElement('option');
-		option.value = type;
-		option.innerHTML = type.toUpperCase();
-		option.selected = type === language;
-		UIParts.languageInput.appendChild(option);
-	});
-};
 const rand = (f) => Math.floor(Math.random() * (f || 100));
 
 const randomize = (offset, range) => {
@@ -56,7 +46,6 @@ const addNode = (node) => {
 };
 
 const getUrlParam = (name, url) => {
-  console.log('get url param');
 	if (!url) {
     url = location.href;
   }
