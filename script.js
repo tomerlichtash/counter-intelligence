@@ -71,8 +71,8 @@ const getInputValue = (name) => Number(UIParts[name].value);
 // resets
 const resetCSSCounter = (offset, counterName) => COUNTER_RESET_NODE.innerHTML = `body{counter-reset: ${counterName} ${offset}}`;
 const setCounterLanguage = (language) => {
-  document.querySelector('body').setAttribute('data-list-type', language);
-}
+	document.querySelector('body').setAttribute('data-list-type', language);
+};
 const resetAll = (cssResetVal, cssCounterRef) => {
 	getNodes().map((node) => ROOT_NODE.removeChild(node));
 	resetCSSCounter(cssResetVal, cssCounterRef);
@@ -103,15 +103,15 @@ const bindUI = (UI, cssCounterRef, params) => {
 };
 
 const renderTypeSelector = (language) => COUNTER_TYPES.map(type => {
-  const option = document.createElement('option');
-  option.value = type;
-  option.innerHTML = type.toUpperCase();
-  option.selected = type === language;
-  UIParts[LANGUAGE_INPUT_ID].appendChild(option);
+	const option = document.createElement('option');
+	option.value = type;
+	option.innerHTML = type.toUpperCase();
+	option.selected = type === language;
+	UIParts[LANGUAGE_INPUT_ID].appendChild(option);
 });
 
 const render = () => {
-  const nodeCount = getInputValue(RANGE_INPUT_ID) - getInputValue(OFFSET_INPUT_ID);
+	const nodeCount = getInputValue(RANGE_INPUT_ID) - getInputValue(OFFSET_INPUT_ID);
 	Array(nodeCount).fill().map((n, index) => addNode(createNode(index)));
 };
 
